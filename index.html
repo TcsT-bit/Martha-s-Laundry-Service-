@@ -121,7 +121,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 
 const { jsPDF } = window.jspdf;
 
-// FIREBASE CONFIG - MARTHA'S LAUNDRY
+// YOUR FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDs4DKiI7VUR42UoFQc9Un6SH4V5_YyEhQ",
   authDomain: "martha-s-laundry-service.firebaseapp.com",
@@ -140,11 +140,13 @@ const auth = getAuth(app);
 
 let DB = {jobs:[],products:[],clients:[],stock:[],quotes:[],employees:[],audit:[]};
 let currentRole=''; let html5QrCode; let currentShareLink = '';
-const LAUNDRY_WHATSAPP = '27799097420'; // CHANGE THIS TO MARTHA'S NUMBER
+const LAUNDRY_WHATSAPP = '27799097420'; // CHANGE THIS
 
 const jobsRef = ref(db, 'marthaslaundryservice/jobs');
 const productsRef = ref(db, 'marthaslaundryservice/categories');
 const requestsRef = ref(db, 'marthaslaundryservice/requests');
+const stockRef = ref(db, 'marthaslaundryservice/stock');
+const clientsRef = ref(db, 'marthaslaundryservice/clients');
 
 // 3D BG
 const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
@@ -193,15 +195,15 @@ function generateClientLink(){
   currentShareLink = baseUrl + '#client';
   document.getElementById('shareLink').innerText = currentShareLink;
   document.getElementById('shareLinkBox').style.display = 'block';
-  alert('Client Link Generated! Click COPY LINK to share.');
 }
-function copyLink(){navigator.clipboard.writeText(currentShareLink); alert('Link Copied!');}
 
-// FIREBASE LOAD
+// FIREBASE LOAD - ADDED STOCK + CLIENTS
 function loadFirebaseData(){
   onValue(jobsRef, snap => {DB.jobs = snap.val()?Object.values(snap.val()):[]; renderJobs()});
   onValue(productsRef, snap => {DB.products = snap.val()?Object.values(snap.val()):[]; renderProducts()});
   onValue(requestsRef, snap => {DB.quotes = snap.val()?Object.values(snap.val()):[]; renderQuotes()});
+  onValue(stockRef, snap => {DB.stock = snap.val()?Object.values(snap.val()):[]; renderStock()});
+  onValue(clientsRef, snap => {DB.clients = snap.val()?Object.values(snap.val()):[]; renderClients()});
 }
 
 // BARCODE
@@ -290,6 +292,7 @@ function checkClientView(){
 function renderAll(){renderJobs();renderProducts();renderStock();renderQuotes();renderClients();renderEmp();renderAudit()}
 window.onload=()=>{const r=localStorage.getItem('mls_role');if(r){currentRole=r}checkClientView()}
 function delJob(id){remove(ref(db, 'marthaslaundryservice/jobs/'+id));addAudit(`Order Deleted: ${id}`)}
+function copyLink(){navigator.clipboard.writeText(currentShareLink); alert('Link Copied!');}
 </script>
 </body>
 </html>
