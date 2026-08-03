@@ -83,10 +83,10 @@ function load(){onValue(pr,s=>{P=s.val()||{};dr();});onValue(or,s=>{O=s.val()||{
 function dr(){clearTimeout(to);to=setTimeout(()=>{rp();rc();bpl();bsl();ud();},120);}
 window.lg=async()=>{err.innerText='Logging in...';try{await signInWithEmailAndPassword(auth,em.value,pw.value);err.innerText='';}catch(e){err.innerText=e.message;}}
 window.lo=()=>signOut(auth);
-window.t=(tab,el)=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['dashboard','products','stock','orders','reports'].forEach(x=>document.getElementById('tab-'+x).style.display=tab==x?'block':'none');} //FIX 1
+window.t=(tab,el)=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['dashboard','products','stock','orders','reports'].forEach(x=>document.getElementById('tab-'+x).style.display=tab==x?'block':'none');}
 function ud(){sp.innerText=Object.keys(P).length;ss.innerText=Object.values(P).reduce((a,b)=>a+(b.stock||0),0);so.innerText=Object.values(O).filter(o=>o.status=='Pending').length;}
 const img=p=>p.img?p.img.split(','):['https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'];
-window.si=(id,url,th)=>{document.getElementById('m_'+id).src=url;document.querySelectorAll(`#card_${id}.card-imgs img`).forEach(i=>i.classList.remove('active'));th.classList.add('active');} //FIX 2
+window.si=(id,url,th)=>{document.getElementById('m_'+id).src=url;document.querySelectorAll(`#card_${id}.card-imgs img`).forEach(i=>i.classList.remove('active'));th.classList.add('active');} // <-- FIXED SPACE HERE
 function card(id,p){let im=img(p),m=im[0],th=im.map((u,i)=>`<img src="${u}" class="${i?'':'active'}" onclick="si('${id}','${u}',this)">`).join(''),ct=cart.find(x=>x.id==id),btn=p.stock>0?ct?`<div class="qty"><button onclick="dq('${id}')">-</button><div>${ct.qty}</div><button onclick="ac('${id}')">+</button></div>`:`<button class="btn-cart" onclick="ac('${id}')">Book Now</button>`:`<button class="btn" disabled>Unavailable</button>`;return`<div class="card" id="card_${id}"><img id="m_${id}" src="${m}"><div class="card-imgs">${th}</div><h4>${p.name}</h4><div class="price">R${p.price}</div>${btn}</div>`;}
 function rp(){if(client)return;pg.innerHTML=Object.entries(P).filter(([id,p])=>(cat=='All'||p.category==cat)&&p.name.toLowerCase().includes(s.value.toLowerCase())).map(([id,p])=>card(id,p)).join('')||'No services';}
 function rc(){if(!client)return;cg.innerHTML=Object.entries(P).filter(([id,p])=>(cat=='All'||p.category==cat)&&p.name.toLowerCase().includes(cs.value.toLowerCase())).map(([id,p])=>card(id,p)).join('')||'No services';}
@@ -100,7 +100,7 @@ function uc(){let c=cart.reduce((a,b)=>a+b.qty,0),t=cart.reduce((a,b)=>a+b.qty*b
 window.openC=()=>{if(!cart.length)return alert('Cart empty');customer.style.display='flex';}
 window.send=()=>{let n=cName.value,p=cPhone.value,e=cEmail.value;if(!n||!p)return alert('Fill name+phone');set(ref(db,'marthaslaundryservice/requests/'+Date.now()),{customerName:n,customerPhone:p,customerEmail:e,items:cart,total:cart.reduce((a,b)=>a+b.qty*b.price,0),date:new Date().toISOString(),status:'Pending'});window.open(`https://wa.me/${WA}?text=${encodeURIComponent(`🧺 Booking\n${n}\n${p}\nTotal:R${cart.reduce((a,b)=>a+b.qty*b.price,0)}`)}`);cart=[];uc();customer.style.display='none';}
 window.ep=id=>{let p=P[id];eid=id;pn.value=p.name;pc.value=p.category;pp.value=p.price;pst.value=p.stock;pd.value=p.desc;ft.innerText='✏️ Editing '+p.name;sv.innerText='Update';cn.style.display='block';}
-window.ce=()=>{eid=null;[pn,pp,pst,pd].forEach(i=>i.value='');ft.innerText='➕ Add Service';sv.innerText='Save';cn.style.display='none';} //FIX 3
+window.ce=()=>{eid=null;[pn,pp,pst,pd].forEach(i=>i.value='');ft.innerText='➕ Add Service';sv.innerText='Save';cn.style.display='none';}
 window.sv=()=>{let d={name:pn.value,category:pc.value,price:+pp.value||0,stock:+pst.value||0,desc:pd.value,img:'https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'};if(!d.name)return alert('Name required');set(ref(db,'marthaslaundryservice/categories/'+(eid||Date.now())),d).then(()=>{alert('Saved!');ce();});}
 window.dp=id=>{if(confirm('Delete?'))remove(ref(db,'marthaslaundryservice/categories/'+id));}
 window.us=id=>{let add=+document.getElementById('st_'+id).value;set(ref(db,'marthaslaundryservice/categories/'+id+'/stock'),(P[id].stock||0)+add);}
@@ -110,6 +110,6 @@ window.oin=id=>{iid=id;let o=O[id];iName.value=o.customerName||'';iPhone.value=o
 window.fInv=()=>{let o=O[iid],tax=iTax.checked?o.total*.15:0,tot=o.total+tax;const d=new jsPDF();d.text("MARTHA'S LAUNDRY",10,10);d.text(`Total: R${tot}`,10,20);d.save('invoice.pdf');invoice.style.display='none';}
 window.qInv=()=>{let n=qName.value,it=qItem.value,qt=+qQty.value,pr=+qPrice.value;set(ref(db,'marthaslaundryservice/requests/'+Date.now()),{customerName:n,items:[{name:it,qty:qt,price:pr}],total:qt*pr,date:new Date().toISOString(),status:'Completed'});const d=new jsPDF();d.text(`${n} - ${it} x${qt} = R${qt*pr}`,10,10);d.save('quick.pdf');quickInvoice.style.display='none';}
 window.pdf=()=>{const d=new jsPDF();d.text(`Services:${Object.keys(P).length}`,10,10);d.save('report.pdf');}
-window.csv=()=>{let csv='ID,Date,Customer,Total,Status\n'+Object.entries(O).map(([id,o])=>`${id.slice(-6)},${new Date(o.date).toLocaleDateString()},${o.customerName},${o.total},${o.status}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv]));a.download='bookings.csv';a.click();} //FIX 4
+window.csv=()=>{let csv='ID,Date,Customer,Total,Status\n'+Object.entries(O).map(([id,o])=>`${id.slice(-6)},${new Date(o.date).toLocaleDateString()},${o.customerName},${o.total},${o.status}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv]));a.download='bookings.csv';a.click();}
 window.cp=()=>{link.select();document.execCommand('copy');alert('Copied!');}
 </script></body></html>
