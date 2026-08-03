@@ -79,14 +79,14 @@ const app=initializeApp(cfg),db=getDatabase(app),auth=getAuth(app),pr=ref(db,'ma
 let P={},O={},cart=[],u={role:'reception'},cat='All',eid=null,iid=null,to;const WA="27607557560",ACC="2218290827",client=new URLSearchParams(location.search).has('client');
 if(client){login.style.display='none';app.style.display='none';client.style.display='block';}
 onAuthStateChanged(auth,async x=>{if(client)return;if(x){u.role=x.email.includes('ceo')?'ceo':x.email.includes('manager')?'manager':'reception';login.style.display='none';app.style.display='block';role.innerText=u.role.toUpperCase();role.className='role role-'+u.role;if(!(await get(pr)).exists())seed();load();}else{login.style.display='block';app.style.display='none';}});
-function load(){onValue(pr,s=>{P=s.val()||{};dr();});onValue(or,s=>{O=s.val()||{};bo();ud();});link.value=location.origin+location.pathname+'?client=1';}
-function dr(){clearTimeout(to);to=setTimeout(()=>{rp();rc();bpl();bsl();ud();},120);}
+function load(){onValue(pr,s=>{P=s.val()||{};dr();},e=>console.error(e));onValue(or,s=>{O=s.val()||{};bo();ud();},e=>console.error(e));link.value=location.origin+location.pathname+'?client=1';}
+function dr(){clearTimeout(to);to=setTimeout(()=>{try{rp();rc();bpl();bsl();ud();}catch(e){console.error('Render error:',e)}},120);}
 window.lg=async()=>{err.innerText='Logging in...';try{await signInWithEmailAndPassword(auth,em.value,pw.value);err.innerText='';}catch(e){err.innerText=e.message;}}
 window.lo=()=>signOut(auth);
 window.t=(tab,el)=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['dashboard','products','stock','orders','reports'].forEach(x=>document.getElementById('tab-'+x).style.display=tab==x?'block':'none');}
 function ud(){sp.innerText=Object.keys(P).length;ss.innerText=Object.values(P).reduce((a,b)=>a+(b.stock||0),0);so.innerText=Object.values(O).filter(o=>o.status=='Pending').length;}
 const img=p=>p.img?p.img.split(','):['https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'];
-window.si=(id,url,th)=>{document.getElementById('m_'+id).src=url;document.querySelectorAll(`#card_${id}.card-imgs img`).forEach(i=>i.classList.remove('active'));th.classList.add('active');} // <-- FIXED SPACE HERE
+window.si=(id,url,th)=>{document.getElementById('m_'+id).src=url;document.querySelectorAll(`#card_${id}.card-imgs img`).forEach(i=>i.classList.remove('active'));th.classList.add('active');} // FIXED: added space
 function card(id,p){let im=img(p),m=im[0],th=im.map((u,i)=>`<img src="${u}" class="${i?'':'active'}" onclick="si('${id}','${u}',this)">`).join(''),ct=cart.find(x=>x.id==id),btn=p.stock>0?ct?`<div class="qty"><button onclick="dq('${id}')">-</button><div>${ct.qty}</div><button onclick="ac('${id}')">+</button></div>`:`<button class="btn-cart" onclick="ac('${id}')">Book Now</button>`:`<button class="btn" disabled>Unavailable</button>`;return`<div class="card" id="card_${id}"><img id="m_${id}" src="${m}"><div class="card-imgs">${th}</div><h4>${p.name}</h4><div class="price">R${p.price}</div>${btn}</div>`;}
 function rp(){if(client)return;pg.innerHTML=Object.entries(P).filter(([id,p])=>(cat=='All'||p.category==cat)&&p.name.toLowerCase().includes(s.value.toLowerCase())).map(([id,p])=>card(id,p)).join('')||'No services';}
 function rc(){if(!client)return;cg.innerHTML=Object.entries(P).filter(([id,p])=>(cat=='All'||p.category==cat)&&p.name.toLowerCase().includes(cs.value.toLowerCase())).map(([id,p])=>card(id,p)).join('')||'No services';}
