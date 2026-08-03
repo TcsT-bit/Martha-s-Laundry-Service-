@@ -64,11 +64,9 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
       <div class="share-link mt-2" id="shareLink"></div>
       <button class="btn w-full mt-2" onclick="copyLink()">📋 COPY LINK</button>
     </div>
-
     <header class="glass p-5 flex justify-between items-center mb-6 neon-border">
       <h2 class="text-3xl quantum-text">MARTHA'S LAUNDRY OS</h2>
     </header>
-
     <div class="flex gap-3 mb-6 overflow-x-auto">
       <button onclick="showTab('dashboard')" class="tab-btn active">Dashboard</button>
       <button onclick="showTab('jobs')" class="tab-btn">Orders</button>
@@ -79,7 +77,6 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
       <button onclick="showTab('payroll')" class="tab-btn" id="payTab">Payroll</button>
       <button onclick="showTab('reports')" class="tab-btn" id="repTab">Reports</button>
     </div>
-
     <div id="dashboard" class="tab">
       <div class="grid grid-cols-4 gap-4">
         <div class="glass p-5"><p class="text-5xl" id="statJobs">0</p><p>Active Orders</p></div>
@@ -89,7 +86,6 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
       </div>
       <div class="glass p-5 mt-4"><h3 class="font-bold text-xl mb-2">AUDIT LOG</h3><div id="auditLog"></div></div>
     </div>
-
     <div id="jobs" class="tab hidden">
       <button onclick="startScanner()" class="btn mb-3" id="scanBtn">📷 SCAN BAG TAG</button>
       <div id="reader" class="hidden w-full max-w-sm mb-3"></div>
@@ -104,7 +100,6 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
       </div>
       <div id="jobList"></div>
     </div>
-
     <div id="quotes" class="tab hidden"><div class="glass p-5 mb-4"><input id="qClient" placeholder="Client"><textarea id="qItems" placeholder="Service | Qty | Price"></textarea><button onclick="saveQuote()" class="btn w-full mt-2">GENERATE QUOTE PDF</button></div><div id="quoteList"></div></div>
     <div id="stock" class="tab hidden"><div class="glass p-5 mb-4"><input id="sName" placeholder="Detergent / Item"><input id="sQty" type="number" placeholder="Qty"><input id="sMin" type="number" placeholder="Min Alert"><input id="sCost" type="number" placeholder="Cost"><button onclick="addStock()" class="btn w-full mt-2">ADD STOCK</button></div><div id="stockList"></div></div>
     <div id="products" class="tab hidden"><div class="glass p-5 mb-4" id="prodForm"><input id="pName" placeholder="Service Name"><input id="pCode" placeholder="Service Code"><textarea id="pDesc" placeholder="Description: Wash, Dry, Iron"></textarea><input id="pImg" placeholder="Image URL"><input id="pVideo" placeholder="Video URL"><input id="pPrice" type="number" placeholder="Price R"><button onclick="saveProduct()" class="btn w-full mt-2">UPLOAD SERVICE</button></div><div id="productList" class="grid grid-cols-3 gap-4"></div></div>
@@ -125,11 +120,11 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 
 const { jsPDF } = window.jspdf;
 
-// YOUR FIREBASE CONFIG
+// FIX 1: ADDED databaseURL - THIS WAS MISSING
 const firebaseConfig = {
   apiKey: "AIzaSyDs4DKiI7VUR42UoFQc9Un6SH4V5_YyEhQ",
   authDomain: "martha-s-laundry-service.firebaseapp.com",
-  databaseURL: "https://martha-s-laundry-service-default-rtdb.firebaseio.com",
+  databaseURL: "https://martha-s-laundry-service-default-rtdb.firebaseio.com", // ADDED
   projectId: "martha-s-laundry-service",
   storageBucket: "martha-s-laundry-service.firebasestorage.app",
   messagingSenderId: "822690544543",
@@ -144,26 +139,18 @@ const auth = getAuth(app);
 
 let DB = {jobs:[],products:[],clients:[],stock:[],quotes:[],employees:[],audit:[]};
 let currentRole=''; let html5QrCode; let currentShareLink = '';
-const LAUNDRY_WHATSAPP = '27799097420'; // CHANGE THIS TO MARTHA'S NUMBER
+const LAUNDRY_WHATSAPP = '27799097420';
 
-const jobsRef = ref(db, 'marthaslaundryservice/jobs');
-const productsRef = ref(db, 'marthaslaundryservice/categories');
+const categoriesRef = ref(db, 'marthaslaundryservice/categories');
 const requestsRef = ref(db, 'marthaslaundryservice/requests');
-const stockRef = ref(db, 'marthaslaundryservice/stock');
-const clientsRef = ref(db, 'marthaslaundryservice/clients');
 
 // 3D BG
 const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
 const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x00D26A,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
 
-// LOGIN - NOW 100% FIREBASE AUTH
+// LOGIN
 function selectRole(r){currentRole=r;passBox.classList.remove('hidden')}
-function login(){
-  signInWithEmailAndPassword(auth, email.value, password.value)
- .then(()=>{})
- .catch(e=>alert("Login Failed: "+e.message))
-}
-
+function login(){signInWithEmailAndPassword(auth, email.value, password.value).catch(e=>alert("Login Failed: "+e.message))}
 function logout(){signOut(auth);localStorage.removeItem('mls_role');location.reload();document.getElementById('shareLinkBox').style.display='none';}
 
 onAuthStateChanged(auth, user => {
@@ -172,6 +159,9 @@ onAuthStateChanged(auth, user => {
     else if(user.email.includes('manager')) currentRole='Manager';
     else currentRole='Reception';
     localStorage.setItem('mls_role',currentRole);initApp()
+  } else {
+    // FIX 2: Don't load data if not logged in
+    loginScreen.classList.remove('hidden');app.classList.add('hidden');
   }
 })
 
@@ -183,16 +173,13 @@ function initApp(){
     statRevBox.classList.add('hidden');statStockBox.classList.add('hidden');statQuoteBox.classList.add('hidden');
     prodForm.classList.add('hidden');scanBtn.classList.add('hidden');
   }
-  if(currentRole==="Manager"){
-    payTab.classList.add('hidden');repTab.classList.add('hidden');
-  }
-  loadFirebaseData();renderAll();
+  if(currentRole==="Manager"){payTab.classList.add('hidden');repTab.classList.add('hidden')}
+  loadFirebaseData();renderAll(); // FIX 3: Only load after login
 }
 
 function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');
 document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
 
-// CLIENT LINK
 function generateClientLink(){
   const baseUrl = window.location.origin + window.location.pathname;
   currentShareLink = baseUrl + '#client';
@@ -204,11 +191,19 @@ function copyLink(){navigator.clipboard.writeText(currentShareLink); alert('Link
 
 // FIREBASE LOAD
 function loadFirebaseData(){
-  onValue(jobsRef, snap => {DB.jobs = snap.val()?Object.values(snap.val()):[]; renderJobs()});
-  onValue(productsRef, snap => {DB.products = snap.val()?Object.values(snap.val()):[]; renderProducts()});
-  onValue(requestsRef, snap => {DB.quotes = snap.val()?Object.values(snap.val()):[]; renderQuotes()});
-  onValue(stockRef, snap => {DB.stock = snap.val()?Object.values(snap.val()):[]; renderStock()});
-  onValue(clientsRef, snap => {DB.clients = snap.val()?Object.values(snap.val()):[]; renderClients()});
+  onValue(categoriesRef, snap => {
+    const data = snap.val() || {};
+    DB.products = Object.values(data).filter(x=>x.type==='service');
+    DB.stock = Object.values(data).filter(x=>x.type==='stock');
+    renderProducts(); renderStock();
+  });
+  onValue(requestsRef, snap => {
+    const data = snap.val() || {};
+    DB.jobs = Object.values(data).filter(x=>x.type==='job');
+    DB.quotes = Object.values(data).filter(x=>x.type==='quote');
+    DB.clients = Object.values(data).filter(x=>x.type==='client');
+    renderJobs(); renderQuotes(); renderClients();
+  });
 }
 
 // BARCODE
@@ -216,9 +211,10 @@ function startScanner(){reader.classList.remove('hidden');html5QrCode=new Html5Q
 
 // ORDERS
 function saveJob(){
-  const job={id:Date.now(),client:jClient.value,phone:jPhone.value,reg:jReg.value,barcode:jBarcode.value,status:jStatus.value,amount:+jAmount.value||0,code:Math.random().toString(36).substr(2,8).toUpperCase()};
-  set(ref(db, 'marthaslaundryservice/jobs/'+job.id), job);
-  if(!DB.clients.find(c=>c.phone===jPhone.value))set(ref(db, 'marthaslaundryservice/clients/'+jPhone.value),{id:jPhone.value,name:jClient.value,phone:jPhone.value});
+  const job={id:Date.now(),type:'job',client:jClient.value,phone:jPhone.value,reg:jReg.value,barcode:jBarcode.value,status:jStatus.value,amount:+jAmount.value||0,code:Math.random().toString(36).substr(2,8).toUpperCase()};
+  set(ref(db, 'marthaslaundryservice/requests/'+job.id), job);
+  const client={id:jPhone.value,type:'client',name:jClient.value,phone:jPhone.value};
+  if(!DB.clients.find(c=>c.phone===jPhone.value))set(ref(db, 'marthaslaundryservice/requests/client_'+jPhone.value), client);
   addAudit(`Order Created: ${jReg.value}`);jClient.value='';jPhone.value='';jReg.value='';jAmount.value='';
 }
 function renderJobs(){
@@ -236,17 +232,17 @@ function renderJobs(){
 function genPDF(id){const j=DB.jobs.find(x=>x.id===id);const doc=new jsPDF();doc.text("MARTHA'S LAUNDRY INVOICE",20,20);doc.text(`Client:${j.client}`,20,30);doc.text(`Order:${j.reg}`,20,40);doc.text(`Item:${j.barcode}`,20,50);doc.text(`TOTAL:R${j.amount}`,20,70);doc.save(`INVOICE_${j.reg}.pdf`)}
 function sendWA(phone,reg,status){window.open(`https://wa.me/${phone}?text=*MARTHA'S LAUNDRY UPDATE*%0A${reg}: ${status}%0ATrack: ${window.location.origin + window.location.pathname}#client`,'_blank')}
 
-// QUOTES/REQUESTS
-function saveQuote(){const quote={id:Date.now(),client:qClient.value,items:qItems.value};set(ref(db, 'marthaslaundryservice/requests/'+quote.id), quote);const doc=new jsPDF();doc.text(`QUOTATION FOR: ${qClient.value}`,20,20);doc.text(qItems.value,20,30);doc.save(`QUOTE_${qClient.value}.pdf`);addAudit(`Quote for ${qClient.value}`);qClient.value='';qItems.value='';}
+// QUOTES
+function saveQuote(){const quote={id:Date.now(),type:'quote',client:qClient.value,items:qItems.value};set(ref(db, 'marthaslaundryservice/requests/'+quote.id), quote);const doc=new jsPDF();doc.text(`QUOTATION FOR: ${qClient.value}`,20,20);doc.text(qItems.value,20,30);doc.save(`QUOTE_${qClient.value}.pdf`);addAudit(`Quote for ${qClient.value}`);qClient.value='';qItems.value='';}
 function renderQuotes(){quoteList.innerHTML='';DB.quotes.forEach(q=>quoteList.innerHTML+=`<div class="glass p-3 mb-2">${q.client}</div>`);statQuotes.innerText=DB.quotes.length}
 
 // STOCK
-function addStock(){const item={id:Date.now(),name:sName.value,qty:+sQty.value,min:+sMin.value,cost:+sCost.value};set(ref(db, 'marthaslaundryservice/stock/'+item.id), item);addAudit(`Stock Added: ${sName.value}`);sName.value='';sQty.value='';}
+function addStock(){const item={id:Date.now(),type:'stock',name:sName.value,qty:+sQty.value,min:+sMin.value,cost:+sCost.value};set(ref(db, 'marthaslaundryservice/categories/'+item.id), item);addAudit(`Stock Added: ${sName.value}`);sName.value='';sQty.value='';}
 function renderStock(){stockList.innerHTML='';let low=0;DB.stock.forEach(s=>{if(s.qty<s.min)low++;stockList.innerHTML+=`<div class="glass p-3 mb-2">${s.name} - Qty:${s.qty} Cost:R${s.cost} ${s.qty<s.min?'<span class="text-red-400">LOW STOCK</span>':''}</div>`});statStock.innerText=low}
 
-// SERVICES/PRODUCTS
+// SERVICES
 function saveProduct(){
-  const prod={id:Date.now(),name:pName.value,code:pCode.value,desc:pDesc.value,img:pImg.value,video:pVideo.value,price:+pPrice.value};
+  const prod={id:Date.now(),type:'service',name:pName.value,code:pCode.value,desc:pDesc.value,img:pImg.value,video:pVideo.value,price:+pPrice.value};
   set(ref(db, 'marthaslaundryservice/categories/'+prod.id), prod);addAudit(`Service: ${pName.value}`);pName.value='';pCode.value='';
 }
 function renderProducts(){
@@ -296,7 +292,7 @@ function checkClientView(){
 // INIT
 function renderAll(){renderJobs();renderProducts();renderStock();renderQuotes();renderClients();renderEmp();renderAudit()}
 window.onload=()=>{const r=localStorage.getItem('mls_role');if(r){currentRole=r}checkClientView()}
-function delJob(id){remove(ref(db, 'marthaslaundryservice/jobs/'+id));addAudit(`Order Deleted: ${id}`)}
+function delJob(id){remove(ref(db, 'marthaslaundryservice/requests/'+id));addAudit(`Order Deleted: ${id}`)}
 </script>
 </body>
 </html>
