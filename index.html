@@ -43,7 +43,11 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
       <div onclick="selectRole('Manager')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">📊</div><b class="text-cyan-500">MANAGER</b></div>
       <div onclick="selectRole('Reception')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">📞</div><b class="text-orange-500">RECEPTION</b></div>
     </div>
-    <div id="passBox" class="hidden mt-6"><input id="password" type="password" placeholder="Password"><button onclick="login()" class="btn w-full mt-3">ENTER SYSTEM</button></div>
+    <div id="passBox" class="hidden mt-6">
+      <input id="email" type="email" placeholder="Enter Firebase Email">
+      <input id="password" type="password" placeholder="Firebase Password" class="mt-2">
+      <button onclick="login()" class="btn w-full mt-3">ENTER SYSTEM</button>
+    </div>
   </div>
 </div>
 
@@ -140,7 +144,7 @@ const auth = getAuth(app);
 
 let DB = {jobs:[],products:[],clients:[],stock:[],quotes:[],employees:[],audit:[]};
 let currentRole=''; let html5QrCode; let currentShareLink = '';
-const LAUNDRY_WHATSAPP = '27799097420'; // CHANGE THIS
+const LAUNDRY_WHATSAPP = '27799097420'; // CHANGE THIS TO MARTHA'S NUMBER
 
 const jobsRef = ref(db, 'marthaslaundryservice/jobs');
 const productsRef = ref(db, 'marthaslaundryservice/categories');
@@ -152,15 +156,14 @@ const clientsRef = ref(db, 'marthaslaundryservice/clients');
 const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
 const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x00D26A,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
 
-// LOGIN
-const passwords={CEO:"ceo2026",Manager:"mgr2026",Reception:"rec2026"};
+// LOGIN - NOW 100% FIREBASE AUTH
 function selectRole(r){currentRole=r;passBox.classList.remove('hidden')}
 function login(){
-  if(password.value===passwords[currentRole]){
-    let email = currentRole==='CEO'?'ceo@marthaslaundryservice.co.za':currentRole==='Manager'?'manager@marthaslaundryservice.co.za':'reception@marthaslaundryservice.co.za';
-    signInWithEmailAndPassword(auth, email, password.value).then(()=>initApp()).catch(e=>alert("Login Failed: "+e.message))
-  }else alert("Access Denied")
+  signInWithEmailAndPassword(auth, email.value, password.value)
+ .then(()=>{})
+ .catch(e=>alert("Login Failed: "+e.message))
 }
+
 function logout(){signOut(auth);localStorage.removeItem('mls_role');location.reload();document.getElementById('shareLinkBox').style.display='none';}
 
 onAuthStateChanged(auth, user => {
@@ -195,9 +198,11 @@ function generateClientLink(){
   currentShareLink = baseUrl + '#client';
   document.getElementById('shareLink').innerText = currentShareLink;
   document.getElementById('shareLinkBox').style.display = 'block';
+  alert('Client Link Generated! Click COPY LINK to share.');
 }
+function copyLink(){navigator.clipboard.writeText(currentShareLink); alert('Link Copied!');}
 
-// FIREBASE LOAD - ADDED STOCK + CLIENTS
+// FIREBASE LOAD
 function loadFirebaseData(){
   onValue(jobsRef, snap => {DB.jobs = snap.val()?Object.values(snap.val()):[]; renderJobs()});
   onValue(productsRef, snap => {DB.products = snap.val()?Object.values(snap.val()):[]; renderProducts()});
@@ -292,7 +297,6 @@ function checkClientView(){
 function renderAll(){renderJobs();renderProducts();renderStock();renderQuotes();renderClients();renderEmp();renderAudit()}
 window.onload=()=>{const r=localStorage.getItem('mls_role');if(r){currentRole=r}checkClientView()}
 function delJob(id){remove(ref(db, 'marthaslaundryservice/jobs/'+id));addAudit(`Order Deleted: ${id}`)}
-function copyLink(){navigator.clipboard.writeText(currentShareLink); alert('Link Copied!');}
 </script>
 </body>
 </html>
