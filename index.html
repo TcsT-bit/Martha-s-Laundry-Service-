@@ -1,57 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARTHA'S LAUNDRY & PROJECTS | WASHING & IRONING SERVICE</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTWFydGhhJ3MgTGF1bmRyeSIsInNob3J0X25hbWUiOiJNTCIsICJzdGFydF91cmwiOiIiLCAiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzQ4Njk2NCIsInRoZW1lX2NvbG9yIjoiIzY1OEE0OSIsImljb25zIjpbeyJzcmMiOiJodHRwczovL2kuZW1hZ2Uub3JnL2RhV2dYbWUvV0EtSU1BLTIwMjYwNzMwLTA0MzYxMy5qcGciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyJ9XX0=">
+<meta name="theme-color" content="#486964">
+<link rel="apple-touch-icon" href="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+:root{--bg:#f5f5f5;--card:#fff;--accent:#658A49;--accent2:#486964;--green:#00b894;--blue:#486964;--purple:#6c5ce7;--text:#2d3436;--muted:#636e72;--border:#dfe6e9;--shadow:0 2px 8px rgba(0,0,0,0.1);--danger:#d63031}
+*{box-sizing:border-box;font-family:'Poppins',sans-serif}body{margin:0;background:var(--bg);color:var(--text)}
+html, body{overflow-x:hidden; width:100%}
+.header{background:linear-gradient(90deg,#486964,#658A49);padding:12px;color:#fff;position:sticky;top:0;z-index:99;box-shadow:var(--shadow)}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.logo{width:50px;height:50px;border-radius:12px;background:#fff;padding:3px;object-fit:cover}
+.search-box{flex:1;background:#fff;border-radius:25px;padding:8px 15px;display:flex;align-items:center}
+.search-box input{border:none;outline:none;width:100%;background:transparent;color:#000}
+.nav-cats{display:flex;gap:15px;overflow-x:auto;margin-top:10px;padding-bottom:5px;padding-right:15px}
+.nav-cats button{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-weight:600;cursor:pointer;white-space:nowrap}
+#clientView .nav-cats button{background:#fff!important;color:#2d3436!important;border:1px solid #dfe6e9!important;opacity:1!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+#clientView .nav-cats button:hover{background:var(--accent)!important;color:#fff!important;transform:translateY(-1px)}
+#clientView .nav-cats button.active{background:var(--accent)!important;color:#fff!important;border:1px solid var(--accent)!important;border-bottom:3px solid #000!important;font-weight:800!important;box-shadow:0 2px 6px rgba(101,138,73,0.3)}
+.container{max-width:100%;margin:0 auto;padding:10px}
+.banner{background:linear-gradient(135deg,#486964,#658A49);color:#fff;padding:20px;border-radius:15px;text-align:center;margin:15px 0;font-weight:800;font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.card{display:flex;flex-direction:column;min-height:380px;background:var(--card);border-radius:12px;padding:10px;box-shadow:var(--shadow);position:relative;overflow-wrap:anywhere;word-break:break-word}
+.card h4{margin:8px 0;font-size:13px;height:auto;min-height:36px;overflow:hidden}
+.price{color:var(--accent);font-weight:800;font-size:16px;margin-top:auto}
+.btn-cart,.btn-oos{margin-top:8px}
+.card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+.card-imgs{display:flex;gap:4px;margin-top:5px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.card-imgs::-webkit-scrollbar{height:4px}
+.card-imgs::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+.card-imgs img{width:45px;height:45px;border-radius:6px;object-fit:cover;flex-shrink:0;cursor:pointer;border:2px solid transparent}
+.card-imgs img.active{border:2px solid var(--accent)}
+.old-price{text-decoration:line-through;color:var(--muted);font-size:11px}
+.stock{font-size:10px;color:var(--green)}
+.stock-low{color:var(--danger);font-weight:700}
+.btn-cart{background:var(--accent);color:#fff;border:none;width:100%;padding:8px;border-radius:8px;font-weight:700;cursor:pointer}
+.btn-oos{background:#ccc;color:#fff;border:none;width:100%;padding:8px;border-radius:8px;font-weight:700;cursor:not-allowed}
+.qty-controls{display:flex;gap:5px;align-items:center;margin-top:8px}
+.qty-btn{background:var(--accent);color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:800;cursor:pointer;font-size:16px}
+.qty-text{background:#f5f5f5;border:1px solid var(--border);padding:6px 10px;border-radius:8px;font-weight:700;min-width:40px;text-align:center}
+.admin{background:#fff;padding:15px;border-radius:12px;margin:15px 0;box-shadow:var(--shadow);overflow-x:hidden}
+.login-box{max-width:400px;margin:40px auto;background:#fff;padding:25px;border-radius:15px;box-shadow:var(--shadow)}
+.login-box h2{text-align:center;color:var(--accent)}
+.role-badge{padding:4px 10px;border-radius:15px;font-size:10px;font-weight:800;color:#fff}
+.role-ceo{background:var(--purple)}.role-manager{background:var(--blue)}.role-sales{background:var(--accent2)}.role-reception{background:var(--green)}
+.tabs{display:flex;gap:8px;border-bottom:2px solid var(--border);margin-bottom:15px;overflow-x:auto;padding-right:10px}
+.tab{padding:10px 15px;cursor:pointer;font-weight:600;white-space:nowrap}
+.tab.active{border-bottom:3px solid var(--accent);color:var(--accent)}
+input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(--border);border-radius:8px}
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:700;cursor:pointer}
+.btn-blue{background:var(--blue)}.btn-green{background:var(--green)}.btn-purple{background:var(--purple)}.btn-gray{background:var(--muted)}.btn-danger{background:var(--danger)}
+.cart-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px;box-shadow:0 -2px 10px rgba(0,0,0,0.2);display:none;z-index:100}
+.loading{text-align:center;padding:40px}
+.error{color:var(--accent);text-align:center;padding:10px}
+.admin-search{margin:10px 0 15px 0}
+.order-card{background:#fff;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid var(--accent);overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px}
+.stat-card{background:linear-gradient(135deg,#486964,#658A49);color:#fff;padding:15px;border-radius:10px;text-align:center}
+.stat-card h4{margin:0;font-size:24px}
+.install-banner{background:var(--blue);color:#fff;padding:12px;border-radius:10px;margin:10px 0;text-align:center;display:none;animation:slideDown 0.3s}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)}}
+.client-header{text-align:center;padding:15px;background:linear-gradient(90deg,#486964,#658A49);color:#fff}
+.brand-tag{background:#e8f5e9;padding:4px 8px;border-radius:15px;font-size:10px;margin:2px 2px;display:inline-block}
+.client-link{margin:15px 0;padding:12px;background:#e8f5e9;border-radius:10px;text-align:center;font-size:12px}
+.bank-info{background:#e8f5e9;border-left:4px solid var(--green);padding:10px;border-radius:8px;margin:10px 0;font-size:12px}
+.site-footer{background:#2d3436;color:#fff;padding:5px 10px;text-align:center;margin-top:20px;font-size:9px;line-height:1.2}
+.footer-title{font-size:10px;font-weight:700;margin-bottom:2px}
+.footer-line{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:1px 0}
+.footer-line a{color:#81c784;text-decoration:none;font-size:9px}
+.footer-line a:hover{text-decoration:underline}
+.footer-copy{margin-top:2px;font-size:8px;opacity:0.5}
+.dark-mode{--bg:#1a1a1a;--card:#2d3436;--text:#fff;--border:#444}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;z-index:999}
+.modal-content{background:var(--card);padding:20px;border-radius:15px;width:90%;max-width:400px}
+@media(max-width:600px){
+.grid{grid-template-columns:1fr!important}
+.stats{grid-template-columns:repeat(2,1fr)}
+.tabs{font-size:12px}
+.tab{padding:8px 10px}
+.card-imgs img{width:38px;height:38px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
 
+<div id="installBanner" class="install-banner">
+  📲 <b>Install ML App</b> - Book laundry service faster
+  <button class="btn" style="padding:5px 10px;margin-left:10px;background:#fff;color:var(--blue)" id="installBtn">Install</button>
+  <button onclick="document.getElementById('installBanner').style.display='none'" style="background:none;border:none;color:#fff;font-size:18px;float:right">x</button>
+</div>
 
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>MARTHA'S LAUNDRY & PROJECTS</title><link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTWFydGhhJ3MgTGF1bmRyeSIsInNob3J0X25hbWUiOiJNTCIsImRpc3BsYXkiOiJzdGFuZGFsb25lIn0="><meta name="theme-color" content="#486964"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');:root{--bg:#f5f5f5;--c:#fff;--a:#658A49;--a2:#486964;--g:#00b894;--b:#486964;--p:#6c5ce7;--t:#2d3436;--m:#636e72;--br:#dfe6e9;--d:#d63031}_{box-sizing:border-box;font-family:Poppins}body{margin:0;background:var(--bg);color:var(--t);overflow-x:hidden}.h{background:linear-gradient(90deg,var(--a2),var(--a));padding:12px;color:#fff;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.1)}.ht{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.logo{width:50px;height:50px;border-radius:12px;background:#fff;padding:3px;object-fit:cover}.s{flex:1;background:#fff;border-radius:25px;padding:8px 15px;display:flex}.s input{border:0;outline:0;width:100%}.nc{display:flex;gap:15px;overflow-x:auto;margin-top:10px;padding-bottom:4px}.nc button{background:rgba(255,255,255,.2);border:0;color:#fff;padding:6px 12px;border-radius:20px;font-weight:600;cursor:pointer;white-space:nowrap}.nc button.ac{background:var(--a);border-bottom:3px solid #000;font-weight:800}.co{padding:10px;max-width:1200px;margin:0 auto}.bn{background:linear-gradient(135deg,var(--a2),var(--a));color:#fff;padding:20px;border-radius:15px;text-align:center;margin:15px 0;font-weight:800}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}.card{display:flex;flex-direction:column;min-height:380px;background:var(--c);border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow-wrap:anywhere}.card img{width:100%;height:160px;object-fit:cover;border-radius:8px}.ci{display:flex;gap:4px;overflow-x:auto}.ci img{width:45px;height:45px;border-radius:6px;cursor:pointer;border:2px solid transparent;flex-shrink:0}.ci img.ac{border-color:var(--a)}.p{color:var(--a);font-weight:800;font-size:16px;margin-top:auto}.btn{width:100%;padding:8px;border-radius:8px;border:0;font-weight:700;cursor:pointer;background:var(--a);color:#fff}.btn:disabled{background:#ccc;cursor:not-allowed;opacity:.6}.qty{display:flex;gap:5px;align-items:center;margin-top:8px}.qty button{width:32px;height:32px;border-radius:8px;border:0;background:var(--a);color:#fff;font-weight:800}.ad{background:#fff;padding:15px;border-radius:12px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}.l{max-width:400px;margin:40px auto;background:#fff;padding:25px;border-radius:15px;box-shadow:0 2px 8px rgba(0,0,0,.1);text-align:center}.rb{padding:4px 10px;border-radius:15px;font-size:10px;font-weight:800;color:#fff}.role-ceo{background:var(--p)}.role-manager{background:var(--b)}.role-reception{background:var(--g)}.t{display:flex;gap:8px;border-bottom:2px solid var(--br);overflow-x:auto}.ta{padding:10px 15px;cursor:pointer;font-weight:600;white-space:nowrap}.ta.ac{border-bottom:3px solid var(--a);color:var(--a)}input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(--br);border-radius:8px;background:#fff}.btn-b{background:var(--b)}.btn-g{background:var(--g)}.btn-p{background:var(--p)}.btn-gray{background:var(--m)}.btn-r{background:var(--d)}.cb{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px;box-shadow:0 -2px 10px rgba(0,0,0,.2);display:none;z-index:100}.o{background:#fff;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid var(--a);overflow-wrap:anywhere}.st{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sc{background:linear-gradient(135deg,var(--a2),var(--a));color:#fff;padding:15px;border-radius:10px;text-align:center}.sc h4{margin:0;font-size:24px}.md{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:999}.md>div{background:var(--c);padding:20px;border-radius:15px;width:90%;max-width:400px}.err{color:var(--d);text-align:center;padding:10px}.hide{display:none}.ld{text-align:center;padding:40px}@media(max-width:600px){.g{grid-template-columns:1fr}.st{grid-template-columns:repeat(2,1fr)}}
-</style><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head><body>
-<div id="ib" style="display:none;text-align:center;padding:12px;background:var(--b);color:#fff">📲 <b>Install ML App</b> <button class="btn" id="ibtn" style="width:auto;padding:5px 10px;background:#fff;color:var(--b)">Install</button> <button onclick="$('ib').style.display='none'" style="background:0;border:0;color:#fff;float:right;font-size:18px">x</button></div>
-<div id="qim" class="md"><div><h3>🧾 Quick Invoice</h3><input id="qn" placeholder="Customer Name"><input id="qp" placeholder="Phone"><input id="qe" placeholder="Email"><input id="qi" placeholder="Service"><input type="number" id="qq" value="1"><input type="number" id="qpr" placeholder="Price"><label><input type="checkbox" id="qt"> VAT 15%</label><label><input type="checkbox" id="qpd" checked> Paid</label><button class="btn" onclick="dqi()">Download PDF</button><button class="btn-gray" onclick="$('qim').style.display='none'">Cancel</button></div></div>
-<div id="im" class="md"><div><h3>📄 Invoice</h3><input id="in" placeholder="Name"><input id="ip" placeholder="Phone"><input id="ie" placeholder="Email"><input id="ia" placeholder="Address"><label><input type="checkbox" id="itx"> VAT 15%</label><label><input type="checkbox" id="ipd"> Paid</label><button class="btn" onclick="dfi()">Download</button><button class="btn-gray" onclick="$('im').style.display='none'">Cancel</button></div></div>
-<div id="cm" class="md"><div><h3>Customer Details</h3><input id="cn" placeholder="Your Name"><input id="cph" placeholder="Your Phone"><input id="cem" placeholder="Your Email"><div style="background:#e8f5e9;padding:10px;border-radius:8px">🏦 Capitec: 2218290827</div><button class="btn" onclick="sq()">Book via WhatsApp</button><button class="btn-gray" onclick="$('cm').style.display='none'">Cancel</button></div></div>
+<div id="quickInvoiceModal" class="modal"> <div class="modal-content"> <h3>🧾 Quick Invoice - Walk In</h3> <input type="text" id="quickInvName" placeholder="Customer Name"> <input type="tel" id="quickInvPhone" placeholder="Customer Phone"> <input type="email" id="quickInvEmail" placeholder="Customer Email"> <input type="text" id="quickInvItem" placeholder="Service Name"> <input type="number" id="quickInvQty" placeholder="Qty" value="1"> <input type="number" id="quickInvPrice" placeholder="Price R"> <label style="display:flex;align-items:center;gap:8px;margin:10px 0"><input type="checkbox" id="quickInvTax"> Add 15% VAT</label> <label style="display:flex;align-items:center;gap:8px;margin:10px 0"><input type="checkbox" id="quickInvPaid" checked> Mark as PAID</label> <button class="btn" onclick="downloadQuickInvoice()" style="width:100%">Download Invoice PDF</button> <button class="btn-gray" onclick="document.getElementById('quickInvoiceModal').style.display='none'" style="width:100%;margin-top:8px">Cancel</button> </div> </div>
+<div id="invoiceModal" class="modal"> <div class="modal-content"> <h3>📄 Edit Invoice Details</h3> <input type="text" id="invCustName" placeholder="Customer Name"> <input type="tel" id="invCustPhone" placeholder="Customer Phone"> <input type="email" id="invCustEmail" placeholder="Customer Email"> <input type="text" id="invCustAddress" placeholder="Customer Address"> <label style="display:flex;align-items:center;gap:8px;margin:10px 0"><input type="checkbox" id="invTaxToggle"> Add 15% VAT</label> <label style="display:flex;align-items:center;gap:8px;margin:10px 0"><input type="checkbox" id="invPaidToggle"> Mark as PAID</label> <button class="btn" onclick="downloadFinalInvoice()" style="width:100%">Download Invoice PDF</button> <button class="btn-gray" onclick="document.getElementById('invoiceModal').style.display='none'" style="width:100%;margin-top:8px">Cancel</button> </div> </div>
+<div id="customerModal" class="modal"> <div class="modal-content"> <h3>Customer Details</h3> <input type="text" id="custName" placeholder="Your Name"> <input type="tel" id="custPhone" placeholder="Your Phone Number"> <input type="email" id="custEmail" placeholder="Your Email Address"> <div class="bank-info"><b>🏦 Payment:</b><br>Capitec: 2218290827<br>Send proof to WhatsApp after booking</div> <button class="btn" onclick="sendQuote()" style="width:100%">Book via WhatsApp</button> <button class="btn-gray" onclick="document.getElementById('customerModal').style.display='none'" style="width:100%;margin-top:8px">Cancel</button> </div> </div>
 
-<div id="cv" class="hide"><div class="h"><img src="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg" class="logo"><h2>MARTHA'S LAUNDRY</h2><div class="s"><input id="csi" placeholder="Search services..." onkeyup="sp()"></div></div><div class="co"><div class="bn">🧺 WASHING & IRONING 🧺</div><div style="background:#e8f5e9;padding:10px;border-radius:8px;margin:10px 0">🏦 Capitec: 2218290827 | 📱 060 755 7560</div><div class="nc"><button onclick="fc('All',event)" class="ac">All</button><button onclick="fc('Washing',event)">Washing</button><button onclick="fc('Blankets',event)">Blankets</button><button onclick="fc('Shoes',event)">Shoes</button></div><div class="g" id="cpg"><div class="ld">Loading services...</div></div></div><div class="cb" id="ccb"><b>Cart: <span id="ccc">0</span> | R<span id="cct">0</span></b> <button class="btn" onclick="ocm()">Book Service</button></div></div>
+<div id="clientView" style="display:none">
+  <div class="client-header">
+    <img src="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg" class="logo" style="margin:0 auto">
+    <h2>MARTHA'S LAUNDRY & PROJECTS</h2>
+    <div class="search-box" style="max-width:500px;margin:10px auto"><input type="text" id="clientSearchInput" placeholder="Search services..." onkeyup="searchProducts()"></div>
+  </div>
+  <div class="container">
+    <div class="client-link"><b>📲 Share this with customers:</b><br><code id="clientLink"></code></div>
+    <div class="banner">🧺 WASHING & IRONING SERVICE 🧺</div>
+    <div class="bank-info"><b>🏦 Pay to:</b> Capitec Account 2218290827 | <b>📱 Orders:</b> 060 755 7560 | <b>📧 Email:</b> Marthangwakhoza@gmail.com</div>
+    <div class="nav-cats">
+      <button onclick="filterCat('All', event)" class="active">All</button>
+      <button onclick="filterCat('Washing', event)">Washing</button>
+      <button onclick="filterCat('Blankets', event)">Blankets</button>
+      <button onclick="filterCat('Shoes', event)">Shoes</button>
+    </div>
+    <h2 style="margin:20px 0">📋 Services & Pricing</h2>
+    <div class="grid" id="clientProductGrid"><div class="loading">Loading services...</div></div>
+  </div>
+  <div class="cart-bar" id="clientCartBar">
+    <b>Cart: <span id="clientCartCount">0</span> | Total: R<span id="clientCartTotal">0</span></b>
+    <button class="btn" onclick="openCustomerModal()">Book Service</button>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-title">MARTHA'S LAUNDRY & PROJECTS PTY LTD</div>
+    <div class="footer-line">📞 <a href="tel:0607557560">060 755 7560</a> | 📧 <a href="mailto:Marthangwakhoza@gmail.com">Marthangwakhoza@gmail.com</a></div>
+    <div class="footer-line">🏦 Capitec: 2218290827</div>
+    <div class="footer-line">📍 Ext. 2, House No 3090, Shushumela, Praktiseer</div>
+    <div class="footer-copy">© 2026 MARTHA'S LAUNDRY. Clean clothes, Happy life!</div>
+  </footer>
+</div>
 
-<div id="ls"><div class="l"><img src="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg" class="logo"><h2>ML BIZPORTAL</h2><div id="le" class="err"></div><input id="lem" placeholder="Email"><input id="lpw" type="password" placeholder="Password"><button class="btn" onclick="dl()">Login</button></div></div>
+<div id="loginScreen">
+  <div class="login-box">
+    <img src="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg" style="width:90px;margin:0 auto;display:block;border-radius:15px">
+    <h2>ML BIZPORTAL</h2>
+    <div id="loginError" class="error"></div>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button class="btn" onclick="doLogin()" style="width:100%">Login</button>
+  </div>
+</div>
 
-<div id="ap" class="hide"><div class="h"><div class="ht"><img src="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg" class="logo"><div class="s"><input id="si" placeholder="Search services..." onkeyup="sp()"></div><span class="rb" id="ur">ADMIN</span><button class="btn" onclick="lo()" style="width:auto;padding:5px 10px">Logout</button></div><div class="nc"><button onclick="fc('All',event)" class="ac">All</button><button onclick="fc('Washing',event)">Washing</button><button onclick="fc('Blankets',event)">Blankets</button><button onclick="fc('Shoes',event)">Shoes</button></div></div>
-<div class="co"><div class="bn">🧺 WASHING & IRONING SERVICE 🧺</div><div class="ad"><div class="t" id="tabs"><div class="ta ac" onclick="st('d',this)">Dashboard</div><div class="ta" onclick="st('p',this)">Services</div><div class="ta" onclick="st('s',this)">Stock</div><div class="ta" onclick="st('o',this)">Bookings</div><div class="ta" id="ut" onclick="st('u',this)">Users</div><div class="ta" onclick="st('r',this)">Reports</div></div>
-<div id="td"><h3>📊 Dashboard</h3><div class="st"><div class="sc"><h4 id="sp">0</h4><small>Services</small></div><div class="sc"><h4 id="ss">0</h4><small>Stock</small></div><div class="sc"><h4 id="so">0</h4><small>Pending</small></div></div><button class="btn-b" onclick="$('qim').style.display='flex'">🧾 Quick Invoice</button><div style="margin-top:15px"><input id="csl" readonly><button class="btn" onclick="cpl()">Copy Link</button><button class="btn-g" onclick="swp()">WhatsApp</button></div></div>
-<div id="tp" class="hide"><h3 id="ft">➕ Add Service</h3><button class="btn-p" onclick="sd()">⚡ Load Laundry Services</button><input id="pn" placeholder="Service Name"><select id="pc"><option>Washing</option><option>Blankets</option><option>Shoes</option></select><input id="pi" placeholder="Image URL"><input id="ppr" type="number" placeholder="Price R"><input id="pop" type="number" placeholder="Old Price R"><input id="pst" type="number" placeholder="Stock Qty"><textarea id="pd" placeholder="Description"></textarea><div style="display:flex;gap:10px"><button class="btn" id="sb" onclick="sv()">Save Service</button><button class="btn-gray" id="cb" onclick="ce()" style="display:none">Cancel</button></div><input id="as" placeholder="🔍 Search services"><div id="pl"></div></div>
-<div id="ts" class="hide"><h3>📦 Stock Management</h3><div id="sl"></div></div><div id="to" class="hide"><h3>📦 Customer Bookings</h3><div id="ol">Loading bookings...</div></div><div id="tu" class="hide"><h3>👥 Users & Roles</h3><p><b>CEO:</b> ceo@marthaslaundryservice.co.za</p><p><b>Manager:</b> manager@marthaslaundryservice.co.za</p></div><div id="tr" class="hide"><h3>📊 Reports</h3><button class="btn-p" onclick="dr()">Download PDF Report</button><button class="btn-g" onclick="dc()">Download CSV Spreadsheet</button></div></div><h2 style="margin:20px 0">⭐ Featured Services</h2><div class="g" id="pg"><div class="ld">Loading services...</div></div></div><div class="cb" id="cb"><b>Cart: <span id="cc">0</span> | R<span id="ct">0</span></b> <button class="btn" onclick="ocm()">Book Service</button></div></div>
+<div id="app" style="display:none">
+  <div class="header">
+    <div class="header-top">
+      <img src="https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg" class="logo">
+      <div class="search-box"><input type="text" id="searchInput" placeholder="Search services..." onkeyup="searchProducts()"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn" style="padding:5px 10px;font-size:12px;background:#fff;color:var(--blue)" onclick="toggleDark()">🌙</button>
+        <span class="role-badge" id="userRole">ADMIN</span><button class="btn" style="padding:5px 10px;font-size:12px" onclick="logout()">Logout</button>
+      </div>
+    </div>
+    <div class="nav-cats">
+      <button onclick="filterCat('All', event)" class="active">All</button>
+      <button onclick="filterCat('Washing', event)">Washing</button>
+      <button onclick="filterCat('Blankets', event)">Blankets</button>
+      <button onclick="filterCat('Shoes', event)">Shoes</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="banner">🧺 WASHING & IRONING SERVICE 🧺</div>
+    <div class="admin" id="adminPanel">
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('dashboard', this)">Dashboard</div>
+        <div class="tab" onclick="showTab('products', this)">Services</div>
+        <div class="tab" onclick="showTab('stock', this)">Stock</div>
+        <div class="tab" onclick="showTab('orders', this)">Bookings</div>
+        <div class="tab" id="usersTab" onclick="showTab('users', this)">Users</div>
+        <div class="tab" onclick="showTab('reports', this)">Reports</div>
+      </div>
+      <div id="tab-dashboard">
+        <h3>📊 Dashboard</h3>
+        <div class="stats">
+          <div class="stat-card"><h4 id="statProducts">0</h4><small>Total Services</small></div>
+          <div class="stat-card"><h4 id="statStock">0</h4><small>Total Bookings</small></div>
+          <div class="stat-card"><h4 id="statOrders">0</h4><small>Pending Bookings</small></div>
+        </div>
+        <div class="bank-info"><b>🏦 Business Account:</b> Capitec 2218290827<br><b>📱 Orders WhatsApp:</b> 060 755 7560<br><b>📧 Email:</b> Marthangwakhoza@gmail.com</div>
+        <button class="btn-blue" onclick="document.getElementById('quickInvoiceModal').style.display='flex'" style="margin-bottom:15px">🧾 Quick Invoice</button>
+        <div class="admin" style="background:#e8f5e9;border-left:4px solid var(--blue);margin-top:15px">
+          <h4>📲 Share Customer Booking Link</h4>
+          <p style="font-size:12px;color:var(--muted)">Send this link to customers so they can book online</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="text" id="clientShareLink" readonly style="flex:1;min-width:200px">
+            <button class="btn" onclick="copyClientLink()">Copy</button>
+            <button class="btn-green" onclick="shareClientWhatsApp()">WhatsApp</button>
+          </div>
+        </div>
+      </div>
+      <div id="tab-products" style="display:none">
+        <h3 id="formTitle">➕ Add Service</h3>
+        <button class="btn-purple" onclick="seedDatabase()">⚡ Load Laundry Services</button>
+        <input type="text" id="pName" placeholder="Service Name">
+        <select id="pCat">
+          <option>Washing</option><option>Blankets</option><option>Shoes</option>
+        </select>
+        <input type="text" id="pImg" placeholder="Image URL">
+        <input type="number" id="pPrice" placeholder="Price R">
+        <input type="number" id="pOldPrice" placeholder="Old Price R">
+        <input type="number" id="pStock" placeholder="Stock Qty">
+        <textarea id="pDesc" placeholder="Description"></textarea>
+        <div style="display:flex;gap:10px">
+          <button class="btn" id="saveBtn" onclick="saveProduct()" style="flex:1">Save Service</button>
+          <button class="btn-gray" id="cancelBtn" onclick="cancelEdit()" style="flex:1;display:none">Cancel</button>
+        </div>
+        <h3 style="margin-top:20px">📋 Manage Services - Click Edit to change price</h3>
+        <input type="text" id="adminSearch" class="admin-search" placeholder="🔍 Search...">
+        <div id="productList"></div>
+      </div>
+      <div id="tab-stock" style="display:none"><h3>📦 Stock Management</h3><div id="stockList"></div></div>
+      <div id="tab-orders" style="display:none"><h3>📦 Customer Bookings</h3><div id="ordersList">Loading bookings...</div></div>
+      <div id="tab-users" style="display:none"><h3>👥 Users & Roles</h3><p><b>CEO:</b> ceo@marthaslaundryservice.co.za</p><p><b>Manager:</b> manager@marthaslaundryservice.co.za</p></div>
+      <div id="tab-reports" style="display:none"><h3>📊 Reports</h3><button class="btn-purple" onclick="downloadReport()">Download PDF Report</button> <button class="btn-green" onclick="downloadCSV()">Download CSV Spreadsheet</button></div>
+    </div>
+    <h2 style="margin:20px 0">⭐ Featured Services</h2>
+    <div class="grid" id="productGrid"><div class="loading">Loading services...</div></div>
+  </div>
+  <div class="cart-bar" id="cartBar">
+    <b>Cart: <span id="cartCount">0</span> | Total: R<span id="cartTotal">0</span></b>
+    <button class="btn" onclick="openCustomerModal()">Book Service</button>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-title">MARTHA'S LAUNDRY & PROJECTS PTY LTD</div>
+    <div class="footer-line">📞 <a href="tel:0607557560">060 755 7560</a> | 📧 <a href="mailto:Marthangwakhoza@gmail.com">Marthangwakhoza@gmail.com</a></div>
+    <div class="footer-line">🏦 Capitec: 2218290827</div>
+    <div class="footer-line">📍 Ext. 2, House No 3090, Shushumela, Praktiseer</div>
+    <div class="footer-copy">© 2026 MARTHA'S LAUNDRY. Clean clothes, Happy life!</div>
+  </footer>
+</div>
 
 <script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';import{getDatabase,ref,set,onValue,remove,get,runTransaction}from'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';const{jsPDF}=window.jspdf;const $=id=>document.getElementById(id);const cfg={apiKey:"AIzaSyDs4DKiI7VUR42UoFQc9Un6SH4V5_YyEhQ",authDomain:"martha-s-laundry-service.firebaseapp.com",databaseURL:"https://martha-s-laundry-service-default-rtdb.firebaseio.com",projectId:"martha-s-laundry-service"};const app=initializeApp(cfg),db=getDatabase(app),auth=getAuth(app);const pr=ref(db,'marthaslaundryservice/categories'),or=ref(db,'marthaslaundryservice/requests');let P={},O={},cart=[],u={role:'reception'},cat='All',eid=null,iid=null,ls=[],dT=null,deferred=null,isC=location.search.includes('client'),WA="27607557560",ACC="2218290827";
-const safe=(fn,n)=>{return(...a)=>{try{return fn(...a)}catch(e){console.error(n,e);const el=$('pg')|| $('cpg');if(el)el.innerHTML='<p class="err">Error loading</p>'}}}; window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('ib').style.display='block'});setTimeout(()=>{ $('ib').style.display='block'},3000);$('ibtn').onclick=()=>{deferred?deferred.prompt():alert('Chrome Menu > Install App')};
-if(isC){ $('ls').classList.add('hide');$('ap').classList.add('hide');$('cv').classList.remove('hide')}
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getDatabase, ref, set, onValue, remove, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+const { jsPDF } = window.jspdf;
 
-onAuthStateChanged(auth,safe(async x=>{if(isC)return;if(x){u.email=x.email;u.role=x.email.includes('ceo')?'ceo':x.email.includes('manager')?'manager':'reception'; $('ls').classList.add('hide');$('ap').classList.remove('hide'); $('ur').innerText=u.role.toUpperCase();$('ur').className='rb role-'+u.role;if(u.role=='reception') $('ut').style.display='none';const s=await get(pr);if(!s.exists())sd();load()}else{$('ls').classList.remove('hide');$('ap').classList.add('hide');ls.forEach(fn=>fn&&fn())}},'auth'));
+const firebaseConfig = {
+  apiKey: "AIzaSyDs4DKiI7VUR42UoFQc9Un6SH4V5_YyEhQ",
+  authDomain: "martha-s-laundry-service.firebaseapp.com",
+  databaseURL: "https://martha-s-laundry-service-default-rtdb.firebaseio.com",
+  projectId: "martha-s-laundry-service",
+  storageBucket: "martha-s-laundry-service.firebasestorage.app",
+  messagingSenderId: "822690544543",
+  appId: "1:822690544543:web:e42b85caff7a3598381baa",
+  measurementId: "G-TV7LG577F0"
+};
 
-function load(){ls.push(onValue(pr,s=>{P=s.val()||{};rd()}));ls.push(onValue(or,s=>{O=s.val()||{};bo();ud()})); $('csl').value=location.origin+location.pathname+'?client=1'} window.dl=async()=>{$('le').innerText='Logging in...';try{await signInWithEmailAndPassword(auth, $('lem').value,$('lpw').value); $('le').innerText=''}catch(e){$('le').innerText='Login failed: '+e.message}};
-window.lo=()=>signOut(auth);
-window.st=(t,el)=>{document.querySelectorAll('.ta').forEach(x=>x.classList.remove('ac'));el.classList.add('ac');['d','p','s','o','u','r'].forEach(x=>$(`t${x}`).style.display=x==t?'block':'none')};
+const BUSINESS_WHATSAPP = "27607557560";
+const CAPITEC_ACCOUNT = "2218290827";
 
-function rd(){clearTimeout(dT);dT=setTimeout(safe(()=>{rp();rc();bpl();bsl();ud()},'rd'),300)};
-function ud(){if(! $('sp'))return;$('sp').innerText=Object.keys(P||{}).length; $('ss').innerText=Object.values(P||{}).reduce((a,b)=>a+(+b.stock||0),0);$('so').innerText=Object.values(O||{}).filter(x=>x.status=='Pending').length}
-const gi=p=>p&&p.img?p.img.split(',').filter(Boolean):['https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'];
-window.si=(id,url,th)=>{const img=$(`m_${id}`);if(img)img.src=url;document.querySelectorAll(`#card_${id}.ci img`).forEach(x=>x.classList.remove('ac'));th.classList.add('ac')};
-function cc(id){let it=cart.find(x=>x.id==id);return!it?`<button class="btn" onclick="ac('${id}')">Book Now</button>`:`<div class="qty"><button onclick="dq('${id}')">-</button><div>${it.qty}</div><button onclick="ac('${id}')">+</button></div>`}
-function card(id,p){if(!p)return'';let im=gi(p),m=im,th=im.map((u,i)=>`<img src="${u}" class="${i?'':'ac'}" onclick="si('${id}','${u}',this)" onerror="this.style.display='none'">`).join(''),btn=(+p.stock||0)>0?cc(id):`<button class="btn" disabled>Unavailable</button>`;return`<div class="card" id="card_${id}"><img id="m_${id}" src="${m}" onerror="this.src='https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'"><div class="ci">${th}</div><h4>${p.name||''}</h4><div class="p">R${+p.price||0} ${+p.oldPrice?`<s>R${+p.oldPrice}</s>`:''}</div>${btn}</div>`}
-function rp(){if(isC)return;const k=Object.keys(P||{}); $('pg').innerHTML=k.length?k.filter(id=>{let p=P||{};return(cat=='All'||p.category==cat)&&(p.name||'').toLowerCase().includes(($('si').value||'').toLowerCase())}).map(id=>card(id,P[id])).join(''):'<p>No services. Click Load Services</p>'};
-function rc(){if(!isC)return;const k=Object.keys(P||{}); $('cpg').innerHTML=k.length?k.filter(id=>{let p=P||{};return(cat=='All'||p.category==cat)&&(p.name||'').toLowerCase().includes(($('csi').value||'').toLowerCase())}).map(id=>card(id,P[id])).join(''):'<p>No services</p>'};
-window.sp=()=>{rp();rc()};window.fc=(c,e)=>{cat=c;rp();rc();document.querySelectorAll('.nc button').forEach(b=>b.classList.remove('ac'));e.target.classList.add('ac')};
-function bpl(){if(u.role=='reception')return; $('pl').innerHTML=Object.entries(P||{}).filter(()=>(p.name||'').toLowerCase().includes(($('as').value||'').toLowerCase())).map(()=>`<div style="padding:10px;border:1px solid var(--br);margin:5px 0"><b>${p.name}</b> - R${+p.price} - Stock:${+p.stock}<div style="float:right"><button class="btn-b" onclick="ep('${id}')">Edit</button>${u.role=='ceo'?`<button class="btn-r" onclick="dp(' ${id}')">Del</button>`:''}</div></div>`).join('')||'<p>No services</p>'}; function bsl(){$('sl').innerHTML=Object.entries(P||{}).map(()=>`<div style="display:flex;justify-content:space-between;padding:8px;border:1px solid var(--br);margin:5px 0"><div><b>${p.name}</b><br>Stock:${+p.stock}</div><div><input type="number" id="st_${id}" value="0" style="width:70px"><button class="btn-g" onclick="us('${id}')">+Add</button></div></div>`).join('')};
-function bo(){$('ol').innerHTML=Object.entries(O||{}).reverse().map(([id,o])=>`<div class="o"><b>#${id.slice(-6)}</b> - R${+o.total} - <span style="color:${o.status=='Completed'?'var(--g)':'var(--a)'};font-weight:700">${o.status}</span><br><small>${new Date(o.date).toLocaleString()}</small><br><small>${o.customerName||'Guest'} | ${o.customerPhone||''}</small><br><small>${(o.items||[]).map(i=>` ${i.name} x${i.qty}`).join(', ')}</small><div style="margin-top:8px"><button class="btn-b" onclick="oin('${id}')">📄 Invoice</button><button class="btn-g" onclick="uos('${id}','Completed')">Complete</button><button class="btn-gray" onclick="uos('${id}','Pending')">Pending</button>${u.role!='reception'?`<button class="btn-r" onclick="do(' ${id}')">Delete</button>`:''}</div></div>`).join('')||'<p>No bookings yet</p>'}; window.uos=(id,s)=>set(ref(db,'marthaslaundryservice/requests/'+id+'/status'),s); window.do=id=>{if(u.role!='ceo'&&u.role!='manager')return alert('No permission');if(confirm('Delete booking?'))remove(ref(db,'marthaslaundryservice/requests/'+id))}; window.oin=id=>{iid=id;let o=O||{};$('in').value=o.customerName||''; $('ip').value=o.customerPhone||'';$('ie').value=o.customerEmail||''; $('ia').value=o.customerAddress||'';$('im').style.display='flex'};
-window.dfi=safe(()=>{let o=O[iid]||{},tx=$('itx').checked?(+o.total)_.15:0,tt=(+o.total)+tx;const d=new jsPDF();d.setFontSize(16);d.text("MARTHA'S LAUNDRY",10,15);d.setFontSize(10);d.text(`Invoice #${iid.slice(-6)}`,150,20);d.text(`Total: R${tt.toFixed(2)}`,10,30);if($('ipd').checked){d.setFontSize(30);d.setTextColor(0,184,148);d.text("PAID",80,100,{angle:-30});d.setTextColor(0,0,0)}d.save(`ML-Invoice-${iid.slice(-6)}.pdf`); $('im').style.display='none'},'dfi'); window.dqi=safe(()=>{let n=$('qn').value,i= $('qi').value,q=+($('qq').value)||1,p=+( $('qpr').value)||0;if(!n||!i||!p)return alert('Fill Name, Service, Price');let sub=q_p,tx=$('qt').checked?sub_.15:0,tt=sub+tx;set(ref(db,'marthaslaundryservice/requests/'+Date.now()),{customerName:n,customerPhone: $('qp').value,customerEmail:$('qe').value,items:[{name:i,qty:q,price:p}],total:tt,date:new Date().toISOString(),status: $('qpd').checked?'Completed':'Pending'});const d=new jsPDF();d.text(`${n} - ${i} - R${tt}`,10,10);d.save('quick.pdf');$('qim').style.display='none'},'dqi');
-window.ep=id=>{let p=P[id]||{};eid=id; $('pn').value=p.name||'';$('pc').value=p.category||''; $('pi').value=p.img||'';$('ppr').value=+p.price||0; $('pop').value=+p.oldPrice||0;$('pst').value=+p.stock||0; $('pd').value=p.desc||'';$('ft').innerText='✏️ '+p.name; $('sb').innerText='Update Service';$('cb').style.display='block'};
-window.ce=()=>{eid=null;['pn','pi','ppr','pop','pst','pd'].forEach(x=> $(x).value='');$('ft').innerText='➕ Add Service'; $('sb').innerText='Save Service';$('cb').style.display='none'};
-window.sv=safe(()=>{let d={name: $('pn').value.trim(),category:$('pc').value,img:$('pi').value||'https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg',price:+$('ppr').value||0,oldPrice:+ $('pop').value||0,stock:+$('pst').value||0,desc:$('pd').value.trim()};if(!d.name)return alert('Service name required');set(ref(db,'marthaslaundryservice/categories/'+(eid||Date.now())),d).then(()=>{alert('Saved!');ce()})},'sv');
-window.sd=safe(()=>{if(u.role!='ceo'&&u.role!='manager')return alert('No permission');[{n:"Big Basket",c:"Washing",p:500},{n:"Medium Basket",c:"Washing",p:350},{n:"Small Basket",c:"Washing",p:200},{n:"Big Blanket",c:"Blankets",p:200},{n:"Medium Blanket",c:"Blankets",p:130},{n:"Throw",c:"Blankets",p:50},{n:"Shoes White",c:"Shoes",p:50},{n:"Shoes Black",c:"Shoes",p:40}].forEach(s=>set(ref(db,'marthaslaundryservice/categories/'+Date.now()+Math.random()),{name:s.n,category:s.c,price:s.p,stock:100,img:'https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'}));alert('Services Loaded!')},'sd');
-window.dp=id=>{if(u.role!='ceo')return alert('CEO only');if(confirm('Delete service?'))remove(ref(db,'marthaslaundryservice/categories/'+id))};
-window.us=id=>{let a=+$(`st_${id}`).value;if(!a)return;runTransaction(ref(db,'marthaslaundryservice/categories/'+id+'/stock'),c=>(c||0)+a)}; //FIXED
-window.ac=id=>{let p=P;if(!p)return;let it=cart.find(x=>x.id==id);it?it.qty++:cart.push({id,name:p.name,price:+p.price,qty:1});up();rp();rc()};
-window.dq=id=>{let it=cart.find(x=>x.id==id);if(it){it.qty--;if(it.qty<=0)cart=cart.filter(x=>x.id!=id)}up();rp();rc()};
-function up(){let c=cart.reduce((a,b)=>a+(b.qty||0),0),t=cart.reduce((a,b)=>a+(b.qty||0)_(b.price||0),0); $('cb').style.display=$('ccb').style.display=c?'block':'none'; $('cc').innerText=$('ccc').innerText=c; $('ct').innerText=$('cct').innerText=t}
-window.ocm=()=>{if(!cart.length)return alert('Cart empty'); $('cm').style.display='flex'}; window.sq=safe(()=>{let n=$('cn').value.trim(),p= $('cph').value.trim(),e=$('cem').value.trim();if(!n||!p)return alert('Name and Phone required');set(ref(db,'marthaslaundryservice/requests/'+Date.now()),{customerName:n,customerPhone:p,customerEmail:e,items:cart,total:cart.reduce((a,b)=>a+(b.qty||0)_(b.price||0),0),date:new Date().toISOString(),status:'Pending'});window.open(`https://wa.me/${WA}?text=${encodeURIComponent(`🧺 MARTHA'S LAUNDRY BOOKING\nName: ${n}\nPhone: ${p}\nTotal: R${cart.reduce((a,b)=>a+(b.qty||0)*(b.price||0),0)}\nPay to: Capitec ${ACC}`)}`);cart=[];up();$('cm').style.display='none'},'sq');
-window.dr=safe(()=>{const d=new jsPDF();d.text(`Martha's Laundry Report`,10,10);d.text(`Services: ${Object.keys(P).length}`,10,20);d.text(`Generated: ${new Date().toLocaleString()}`,10,30);d.save("ML-Report.pdf")},'dr');
-window.dc=safe(()=>{if(!Object.keys(O).length)return alert('No bookings');let csv='BookingID,Date,Customer,Phone,Total,Status\n'+Object.entries(O).map(([id,o])=>`${id.slice(-6)},${new Date(o.date).toLocaleDateString()},${o.customerName||''},${o.customerPhone||''},${+o.total},${o.status}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='bookings.csv';a.click()},'dc');
-window.cpl=()=>{$('csl').select();document.execCommand('copy');alert('Link copied!')};
-window.swp=()=>window.open(`https://wa.me/?text=${encodeURIComponent(`🧺 MARTHA'S LAUNDRY\nBook here: ${$('csl').value}`)}`);
-</script></body></html>
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isClientMode = urlParams.has('client');
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
+  const productsRef = ref(db, 'marthaslaundryservice/categories');
+  const ordersRef = ref(db, 'marthaslaundryservice/requests');
+  let products = {}; let orders = {}; let cart = [];
+  let currentUser = {role:'reception'}; let currentFilter = 'All'; let editingId = null; let deferredPrompt; let currentInvoiceId = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBanner').style.display = 'block';
+  });
+  setTimeout(()=>{ if(!deferredPrompt) document.getElementById('installBanner').style.display = 'block'; }, 3000);
+
+  document.getElementById('installBtn').onclick = () => {
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        document.getElementById('installBanner').style.display = 'none';
+      });
+    } else {
+      alert('Install: Chrome Menu > Install App. Must be on HTTPS to work properly.')
+    }
+  };
+
+  if(isClientMode){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('clientView').style.display = 'block';
+    document.getElementById('clientLink').innerText = window.location.origin + window.location.pathname + '?client=1';
+  }
+
+  const loginScreen = document.getElementById('loginScreen');
+  const appDiv = document.getElementById('app');
+  const clientProductGrid = document.getElementById('clientProductGrid');
+  const productGrid = document.getElementById('productGrid');
+  const productList = document.getElementById('productList');
+  const stockList = document.getElementById('stockList');
+  const ordersList = document.getElementById('ordersList');
+  const searchInput = document.getElementById('searchInput');
+  const clientSearchInput = document.getElementById('clientSearchInput');
+  const adminSearch = document.getElementById('adminSearch');
+  const cartBar = document.getElementById('cartBar');
+  const clientCartBar = document.getElementById('clientCartBar');
+  const cartCount = document.getElementById('cartCount');
+  const clientCartCount = document.getElementById('clientCartCount');
+  const cartTotal = document.getElementById('cartTotal');
+  const clientCartTotal = document.getElementById('clientCartTotal');
+  const pName = document.getElementById('pName'); const pCat = document.getElementById('pCat');
+  const pImg = document.getElementById('pImg');
+  const pPrice = document.getElementById('pPrice');
+  const pOldPrice = document.getElementById('pOldPrice'); const pStock = document.getElementById('pStock');
+  const pDesc = document.getElementById('pDesc'); const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn'); const formTitle = document.getElementById('formTitle');
+  const loginError = document.getElementById('loginError');
+
+  if(adminSearch) adminSearch.addEventListener('keyup', buildProductList);
+  window.doLogin = async () => {
+    loginError.innerText = 'Logging in...';
+    try{
+      await signInWithEmailAndPassword(auth, loginEmail.value, loginPass.value);
+      loginError.innerText = '';
+    } catch(e){
+      loginError.innerText = 'Login failed: ' + e.message
+    }
+  }
+  window.logout = () => { signOut(auth) }
+
+  onAuthStateChanged(auth, async user => {
+    if(isClientMode) return;
+    if(user){
+      let role = 'reception';
+      if(user.email === 'ceo@marthaslaundryservice.co.za') role = 'ceo';
+      else if(user.email === 'manager@marthaslaundryservice.co.za') role = 'manager';
+      currentUser = {email: user.email, role: role};
+      loginScreen.style.display = 'none'; appDiv.style.display = 'block';
+      document.getElementById('userRole').innerText = currentUser.role.toUpperCase();
+      document.getElementById('userRole').className = 'role-badge role-' + currentUser.role;
+      if(currentUser.role == 'reception') document.getElementById('usersTab').style.display = 'none';
+      
+      const snapshot = await get(productsRef);
+      if(!snapshot.exists()){
+        seedDatabase();
+      }
+
+      buildProductList(); buildStockList(); buildOrders(); updateDashboard(); setClientLink();
+    } else { loginScreen.style.display = 'block'; appDiv.style.display = 'none'; }
+  })
+
+  window.showTab = (tab, el) => {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    ['dashboard','products','stock','orders','users','reports'].forEach(t=>{
+      document.getElementById('tab-'+t).style.display = t==tab?'block':'none'
+    })
+  }
+
+  onValue(productsRef, snap => { products = snap.val() || {}; renderProducts(); renderClientProducts(); buildProductList(); buildStockList(); updateDashboard(); })
+  onValue(ordersRef, snap => { orders = snap.val() || {}; buildOrders(); updateDashboard(); })
+
+  function updateDashboard(){
+    document.getElementById('statProducts').innerText = Object.keys(products).length;
+    document.getElementById('statStock').innerText = Object.values(products).reduce((a,b)=>a+(b.stock||0),0);
+    document.getElementById('statOrders').innerText = Object.values(orders).filter(o=>o.status=='Pending').length;
+  }
+
+  function getImages(p){ if(!p.img) return ['https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
+  window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId} .card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
+
+  function getCartControls(id){
+    let item = cart.find(x=>x.id==id);
+    if(!item) return `<button class="btn-cart" onclick="addToCart('${id}')">Book Now</button>`;
+    return `<div class="qty-controls"><button class="qty-btn" onclick="decreaseQty('${id}')">-</button><div class="qty-text">${item.qty}</div><button class="qty-btn" onclick="addToCart('${id}')">+</button></div>`;
+  }
+
+  function renderClientProducts(){
+    if(!isClientMode) return;
+    clientProductGrid.innerHTML = '';
+    if(Object.keys(products).length === 0){ clientProductGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">Loading services...</p>`; return; }
+    Object.entries(products).filter(([id,p])=>{ let matchCat = currentFilter == 'All' || p.category == currentFilter; let matchSearch = p.name.toLowerCase().includes(clientSearchInput.value.toLowerCase()); return matchCat && matchSearch; }).forEach(([id,p])=>{
+      let imgs = getImages(p); let mainImg = imgs[0];
+      let extraImgs = imgs.map((u,i)=>`<img src="${u}" class="${i==0?'active':''}" onclick="switchImage('${id}','${u}',this)" onerror="this.style.display='none'">`).join('');
+      let brands = p.desc? p.desc.split(',').map(b=>`<span class="brand-tag">${b}</span>`).join('') : '';
+      let cartBtn = p.stock > 0? getCartControls(id) : `<button class="btn-oos" disabled>Unavailable</button>`;
+      clientProductGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${p.price} ${p.oldPrice? `<span class="old-price">R${p.oldPrice}</span>`:''}</div>${cartBtn}</div>`;
+    })
+  }
+
+    function renderProducts(){
+    if(isClientMode) return;
+    productGrid.innerHTML = '';
+    if(Object.keys(products).length === 0){ productGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet. Click "Load Laundry Services"</p>`; return; }
+    Object.entries(products).filter(([id,p])=>{ let matchCat = currentFilter == 'All' || p.category == currentFilter; let matchSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase()); return matchCat && matchSearch; }).forEach(([id,p])=>{
+      let imgs = getImages(p); let mainImg = imgs[0];
+      let extraImgs = imgs.map((u,i)=>`<img src="${u}" class="${i==0?'active':''}" onclick="switchImage('${id}','${u}',this)" onerror="this.style.display='none'">`).join('');
+      let brands = p.desc? p.desc.split(',').map(b=>`<span class="brand-tag">${b}</span>`).join('') : '';
+      let cartBtn = p.stock > 0? getCartControls(id) : `<button class="btn-oos" disabled>Unavailable</button>`;
+      productGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${p.price} ${p.oldPrice? `<span class="old-price">R${p.oldPrice}</span>`:''}</div>${cartBtn}</div>`;
+    })
+  }
+
+  window.searchProducts = () => { renderProducts(); renderClientProducts(); }
+  window.filterCat = (cat, e) => {
+    currentFilter=cat;
+    renderProducts();
+    renderClientProducts();
+    document.querySelectorAll('.nav-cats button').forEach(b=>b.classList.remove('active'));
+    if(e) e.target.classList.add('active');
+  }
+
+  function buildProductList(){
+    if(currentUser.role == 'reception') return;
+    productList.innerHTML = '';
+    let searchTerm = adminSearch.value.toLowerCase();
+    Object.entries(products).filter(([id,p])=>{ return p.name.toLowerCase().includes(searchTerm) || p.category.toLowerCase().includes(searchTerm) }).forEach(([id,p])=>{
+      productList.innerHTML += `<div style="padding:10px;border:1px solid var(--border);border-radius:8px;margin:5px 0;background:#fafafa"><b>${p.name}</b> - R${p.price} - Stock: ${p.stock} - <small>${p.category}</small><div style="float:right;gap:5px;display:flex"><button onclick="editProduct('${id}')" class="btn-blue" style="padding:5px 10px;font-size:12px">Edit</button>${currentUser.role== 'ceo'? `<button onclick="deleteProduct('${id}')" class="btn-danger" style="padding:5px 10px;font-size:12px">Del</button>` : ''}</div></div>`;
+    })
+    if(productList.innerHTML === '') productList.innerHTML = '<p style="text-align:center;color:var(--muted)">No services found</p>'
+  }
+
+  function buildOrders(){
+    if(currentUser.role == 'reception') return;
+    ordersList.innerHTML = '';
+    if(Object.keys(orders).length === 0){ ordersList.innerHTML = '<p>No bookings yet</p>'; return; }
+    Object.entries(orders).reverse().forEach(([id,o])=>{
+      let statusColor = o.status=='Completed'? 'var(--green)' : 'var(--accent)';
+      ordersList.innerHTML += `
+      <div class="order-card">
+        <b>Booking #${id.slice(-6)}</b> - R${o.total} - <span style="color:${statusColor};font-weight:700">${o.status}</span><br>
+        <small>${new Date(o.date).toLocaleString()}</small><br>
+        <small><b>Customer:</b> ${o.customerName || 'Guest'} | ${o.customerPhone || o.user} | ${o.customerEmail || ''}</small><br>
+        <small>${o.items.map(i=>`${i.name} x${i.qty}`).join(', ')}</small><br>
+        <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn-blue" onclick="openInvoiceModal('${id}')">📄 Invoice</button>
+          <button class="btn-green" onclick="updateOrderStatus('${id}','Completed')">Mark Complete</button>
+          <button class="btn-gray" onclick="updateOrderStatus('${id}','Pending')">Mark Pending</button>
+          ${currentUser.role== 'ceo' || currentUser.role== 'manager'? `<button class="btn-danger" onclick="deleteOrder('${id}')">Delete</button>` : ''}
+        </div>
+      </div>`;
+    })
+  }
+
+  window.updateOrderStatus = (id, status) => { set(ref(db, 'marthaslaundryservice/requests/' + id + '/status'), status); }
+  window.deleteOrder = (id) => { if(currentUser.role!= 'ceo' && currentUser.role!= 'manager') return alert('No permission'); if(confirm('Delete this booking?')) remove(ref(db, 'marthaslaundryservice/requests/' + id)) }
+
+  window.openInvoiceModal = (id) => {
+    currentInvoiceId = id; let o = orders[id];
+    document.getElementById('invCustName').value = o.customerName || '';
+    document.getElementById('invCustPhone').value = o.customerPhone || '';
+    document.getElementById('invCustEmail').value = o.customerEmail || '';
+    document.getElementById('invCustAddress').value = o.customerAddress || '';
+    document.getElementById('invoiceModal').style.display = 'flex';
+  }
+
+  window.downloadFinalInvoice = () => {
+    let o = orders[currentInvoiceId];
+    let custName = document.getElementById('invCustName').value || o.customerName || 'Guest';
+    let custPhone = document.getElementById('invCustPhone').value || o.customerPhone || '';
+    let custEmail = document.getElementById('invCustEmail').value || o.customerEmail || '';
+    let custAddress = document.getElementById('invCustAddress').value || '';
+    let addTax = document.getElementById('invTaxToggle').checked; let isPaid = document.getElementById('invPaidToggle').checked;
+    let subtotal = o.total; let tax = addTax? subtotal * 0.15 : 0; let grandTotal = subtotal + tax;
+    const doc = new jsPDF();
+    doc.addImage('https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg', 'JPEG', 10, 10, 25, 25);
+    doc.setFontSize(16); doc.setFont(undefined, 'bold'); doc.text("MARTHA'S LAUNDRY & PROJECTS", 40, 18);
+    doc.setFontSize(9); doc.setFont(undefined, 'normal');
+    doc.text("060 755 7560 | Capitec: 2218290827", 40, 24);
+    doc.line(10, 40, 200, 40);
+    doc.setFontSize(18); doc.setFont(undefined, 'bold'); doc.text("TAX INVOICE", 150, 50);
+    doc.setFontSize(10); doc.text(`Invoice #: ${currentInvoiceId.slice(-6)}`, 150, 57);
+    doc.text(`Date: ${new Date(o.date).toLocaleDateString()}`, 150, 62);
+    doc.setFontSize(12); doc.text("BILL TO:", 10, 50); doc.setFontSize(10);
+    doc.text(custName, 10, 57); if(custPhone) doc.text(custPhone, 10, 62);
+    if(custEmail) doc.text(custEmail, 10, 67); if(custAddress) doc.text(custAddress, 10, 72);
+    let y = 90; doc.setFontSize(10); doc.setFont(undefined, 'bold');
+    doc.text("Service", 10, y); doc.text("Qty", 120, y); doc.text("Rate", 145, y); doc.text("Amount", 175, y);
+    y += 5; doc.line(10, y, 200, y); y += 7; doc.setFont(undefined, 'normal');
+    o.items.forEach(i=>{ doc.text(i.name.substring(0,35), 10, y); doc.text(i.qty.toString(), 120, y); doc.text(`R${i.price}`, 145, y); doc.text(`R${i.price*i.qty}`, 175, y); y += 7; });
+    y += 5; doc.line(120, y, 200, y); y += 7; doc.text("Subtotal:", 145, y); doc.text(`R${subtotal.toFixed(2)}`, 175, y); y += 7;
+    if(addTax){ doc.text("VAT 15%:", 145, y); doc.text(`R${tax.toFixed(2)}`, 175, y); y += 7; }
+    doc.setFont(undefined, 'bold'); doc.setFontSize(12); doc.text("TOTAL:", 145, y); doc.text(`R${grandTotal.toFixed(2)}`, 175, y);
+    if(isPaid){ doc.setFontSize(30); doc.setTextColor(0, 184, 148); doc.text("PAID", 80, 150, {angle: -30}); doc.setTextColor(0,0,0); }
+    doc.setFontSize(8); doc.setFont(undefined, 'normal');
+    doc.text("Bank: Capitec 2218290827 | WhatsApp: 060 755 7560", 105, 270, {align: "center"});
+    doc.text("Thank you for choosing Martha's Laundry - Clean clothes, Happy life!", 105, 280, {align: "center"});
+    doc.save(`ML-Invoice-${currentInvoiceId.slice(-6)}.pdf`); document.getElementById('invoiceModal').style.display='none';
+  }
+
+  window.downloadQuickInvoice = () => {
+    let name = document.getElementById('quickInvName').value;
+    let phone = document.getElementById('quickInvPhone').value;
+    let email = document.getElementById('quickInvEmail').value;
+    let item = document.getElementById('quickInvItem').value;
+    let qty = Number(document.getElementById('quickInvQty').value) || 1;
+    let price = Number(document.getElementById('quickInvPrice').value) || 0;
+    let addTax = document.getElementById('quickInvTax').checked;
+    let isPaid = document.getElementById('quickInvPaid').checked;
+
+    if(!name ||!item ||!price) return alert('Please fill Name, Service and Price');
+
+    let subtotal = qty * price;
+    let tax = addTax? subtotal * 0.15 : 0;
+    let grandTotal = subtotal + tax;
+    let invId = Date.now().toString().slice(-6);
+    let orderId = Date.now().toString();
+
+    const order = {
+      user: 'Walk-In',
+      customerName: name,
+      customerPhone: phone,
+      customerEmail: email,
+      items: [{name: item, qty: qty, price: price}],
+      total: grandTotal,
+      subtotal: subtotal,
+      tax: tax,
+      vat: addTax,
+      paid: isPaid,
+      date: new Date().toISOString(),
+      status: isPaid? 'Completed' : 'Pending',
+      type: 'Walk-In Invoice'
+    };
+    set(ref(db, 'marthaslaundryservice/requests/' + orderId), order);
+
+    const doc = new jsPDF();
+    doc.addImage('https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg', 'JPEG', 10, 10, 25, 25);
+    doc.setFontSize(16); doc.setFont(undefined, 'bold'); doc.text("MARTHA'S LAUNDRY & PROJECTS", 40, 18);
+    doc.setFontSize(9); doc.text("060 755 7560 | Capitec: 2218290827", 40, 24); doc.line(10, 40, 200, 40);
+    doc.setFontSize(18); doc.setFont(undefined, 'bold'); doc.text("TAX INVOICE", 150, 50);
+    doc.setFontSize(10); doc.text(`Invoice #: ${invId}`, 150, 57); doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 62);
+    doc.setFontSize(12); doc.text("BILL TO:", 10, 50); doc.setFontSize(10);
+    doc.text(name, 10, 57); if(phone) doc.text(phone, 10, 62); if(email) doc.text(email, 10, 67);
+    let y = 90; doc.setFont(undefined, 'bold'); doc.text("Service", 10, y); doc.text("Qty", 120, y); doc.text("Rate", 145, y); doc.text("Amount", 175, y);
+    y += 5; doc.line(10, y, 200, y); y += 7; doc.setFont(undefined, 'normal');
+    doc.text(item.substring(0,35), 10, y); doc.text(qty.toString(), 120, y); doc.text(`R${price}`, 145, y); doc.text(`R${subtotal}`, 175, y); y+=7;
+    y += 5; doc.line(120, y, 200, y); y += 7; doc.text("Subtotal:", 145, y); doc.text(`R${subtotal.toFixed(2)}`, 175, y); y += 7;
+    if(addTax){ doc.text("VAT 15%:", 145, y); doc.text(`R${tax.toFixed(2)}`, 175, y); y += 7; }
+    doc.setFont(undefined, 'bold'); doc.setFontSize(12); doc.text("TOTAL:", 145, y); doc.text(`R${grandTotal.toFixed(2)}`, 175, y);
+    if(isPaid){ doc.setFontSize(30); doc.setTextColor(0, 184, 148); doc.text("PAID", 80, 150, {angle: -30}); doc.setTextColor(0,0,0); }
+    doc.text("Bank: Capitec 2218290827 | WhatsApp: 060 755 7560", 105, 270, {align: "center"});
+    doc.text("Thank you for choosing Martha's Laundry - Clean clothes, Happy life!", 105, 280, {align: "center"});
+    doc.save(`ML-QuickInvoice-${invId}.pdf`);
+
+    document.getElementById('quickInvoiceModal').style.display='none';
+    alert('✅ Walk-In Invoice saved! It will now appear in Bookings + CSV');
+  }
+
+  window.editProduct = (id) => { if(currentUser.role == 'reception') return alert('No permission'); let p = products[id]; editingId = id; pName.value = p.name; pCat.value = p.category; pImg.value = p.img; pPrice.value = p.price; pOldPrice.value = p.oldPrice; pStock.value = p.stock; pDesc.value = p.desc; formTitle.innerText = "✏️ Editing: " + p.name; saveBtn.innerText = "Update Service"; saveBtn.style.background = "var(--blue)"; cancelBtn.style.display = "block"; document.getElementById('tab-products').scrollIntoView(); }
+  window.cancelEdit = () => { editingId = null; [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value=''); formTitle.innerText = "➕ Add Service"; saveBtn.innerText = "Save Service"; saveBtn.style.background = "var(--accent)"; cancelBtn.style.display = "none"; }
+  window.saveProduct = () => { if(currentUser.role == 'reception') return alert('No permission'); let productData = { name: pName.value.trim(), category: pCat.value, img: pImg.value.trim() || 'https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg', price: Number(pPrice.value) || 0, oldPrice: Number(pOldPrice.value) || 0, stock: Number(pStock.value) || 0, desc: pDesc.value.trim() }; if(!productData.name){ return alert('Please enter service name') } if(editingId){ set(ref(db, 'marthaslaundryservice/categories/' + editingId), productData).then(()=>{ alert('Service Updated!'); cancelEdit(); }).catch(err=> alert('Error: ' + err.message)); } else { let id = Date.now().toString(); set(ref(db, 'marthaslaundryservice/categories/' + id), productData).then(()=>{ [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value=''); alert('Service Added!'); }).catch(err=> alert('Error: ' + err.message)); } }
+
+  function buildStockList(){ stockList.innerHTML = ''; Object.entries(products).forEach(([id,p])=>{ stockList.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--border);border-radius:8px;margin:5px 0"><div><b>${p.name}</b><br><small class="${p.stock<10?'stock-low':''}">Stock: ${p.stock}</small></div><div><input type="number" id="stock_${id}" value="0" style="width:80px"><button class="btn-green" onclick="updateStock('${id}')">+ Add</button></div></div>`; }) }
+
+  // LAUNDRY SERVICES - PRICES EDITABLE
+  window.seedDatabase = () => {
+    if(currentUser.role!= 'ceo' && currentUser.role!= 'manager') return alert('No permission');
+    const defaultData = [
+      {name:"Big Basket", category:"Washing", price:500, stock:100, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Washing & Ironing"},
+      {name:"Medium Basket", category:"Washing", price:350, stock:100, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Washing & Ironing"},
+      {name:"Small Basket", category:"Washing", price:200, stock:100, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Washing & Ironing"},
+      {name:"Big Blanket", category:"Blankets", price:200, stock:50, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Wash & Dry"},
+      {name:"Medium Blanket", category:"Blankets", price:130, stock:50, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Wash & Dry"},
+      {name:"Throw", category:"Blankets", price:50, stock:50, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Wash & Dry"},
+      {name:"Shoes White", category:"Shoes", price:50, stock:200, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Wash & Polish"},
+      {name:"Shoes Black", category:"Shoes", price:40, stock:200, img:"https://i.ibb.co/3Y7LzWPw/IMG-20260731-WA3745.jpg", desc:"Wash & Polish"}
+    ];
+    defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'marthaslaundryservice/categories/' + id), p); });
+    alert('✅ Martha\'s Laundry Services loaded! All prices editable')
+  }
+
+  window.deleteProduct = (id) => { if(currentUser.role!= 'ceo') return alert('CEO only'); if(confirm('Delete this service?')) remove(ref(db, 'marthaslaundryservice/categories/' + id)) }
+  window.updateStock = (id) => { let add = parseInt(document.getElementById('stock_'+id).value); set(ref(db, 'marthaslaundryservice/categories/' + id + '/stock'), (products[id].stock||0) + add); document.getElementById('stock_'+id).value = 0; }
+
+  window.addToCart = (id) => { let p = products[id]; let item = cart.find(x=>x.id==id); if(item){ item.qty++ } else { cart.push({id,name:p.name,price:p.price,qty:1,category:p.category}) } updateCart(); renderProducts(); renderClientProducts(); }
+  window.decreaseQty = (id) => {
+    let item = cart.find(x=>x.id==id);
+    if(item){
+      item.qty--;
+      if(item.qty <= 0){
+        cart = cart.filter(x=>x.id!=id);
+      }
+    }
+    updateCart();
+    renderProducts();
+    renderClientProducts();
+  }
+
+  function updateCart(){
+    cartBar.style.display = cart.length?'block':'none'; clientCartBar.style.display = cart.length?'block':'none';
+    let count = cart.reduce((a,b)=>a+b.qty,0); let total = cart.reduce((a,b)=>a+b.qty*b.price,0);
+    if(cartCount) cartCount.innerText = count; if(clientCartCount) clientCartCount.innerText = count;
+    if(cartTotal) cartTotal.innerText = total; if(clientCartTotal) clientCartTotal.innerText = total;
+  }
+
+  window.openCustomerModal = () => { if(cart.length === 0) return alert('Cart empty'); document.getElementById('customerModal').style.display = 'flex'; }
+  window.sendQuote = () => {
+    let name = document.getElementById('custName').value.trim(); let phone = document.getElementById('custPhone').value.trim(); let email = document.getElementById('custEmail').value.trim();
+    if(!name ||!phone) return alert('Please enter Name and Phone');
+    const orderId = Date.now().toString();
+    const order = { user: isClientMode? name : currentUser.email, customerName: name, customerPhone: phone, customerEmail: email, items: cart, total: cart.reduce((a,b)=>a+b.qty*b.price,0), date: new Date().toISOString(), status: 'Pending' };
+    set(ref(db, 'marthaslaundryservice/requests/' + orderId), order);
+    let msg = `🧺 MARTHA'S LAUNDRY BOOKING\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n` + cart.map(i=>`${i.name} x${i.qty} - R${i.price}`).join('\n') + `\nTotal: R${order.total}\n\n🏦 Pay to: Capitec ${CAPITEC_ACCOUNT}\n📱 Send proof to WhatsApp: 060 755 7560`;
+    window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`);
+    cart = []; updateCart(); renderProducts(); renderClientProducts();
+    document.getElementById('customerModal').style.display='none'; document.getElementById('custName').value=''; document.getElementById('custPhone').value=''; document.getElementById('custEmail').value='';
+    alert('Booking sent to WhatsApp! Pay to Capitec 2218290827 and send proof.')
+  }
+
+  window.downloadReport = () => {
+    const doc = new jsPDF(); doc.text("Martha's Laundry Report", 10, 10);
+    doc.text(`Total Services: ${Object.keys(products).length}`, 10, 20);
+    doc.text(`Total Bookings: ${Object.values(products).reduce((a,b)=>a+(b.stock||0),0)}`, 10, 30);
+    doc.text(`Pending Bookings: ${Object.values(orders).filter(o=>o.status=='Pending').length}`, 10, 40);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 10, 50); doc.save("ML-Report.pdf");
+  }
+
+  window.downloadCSV = () => {
+    if(Object.keys(orders).length === 0) return alert('No bookings to export');
+    let csv = 'Booking ID,Date,Customer Name,Phone,Email,Services,Total R,Status\n';
+    Object.entries(orders).forEach(([id,o])=>{
+      let items = o.items.map(i=>`${i.name} x${i.qty}`).join('; '); let date = new Date(o.date).toLocaleDateString();
+      csv += `"${id.slice(-6)}","${date}","${o.customerName||'Guest'}","${o.customerPhone||''}","${o.customerEmail||''}","${items}",${o.total},"${o.status}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob); link.download = `ML-Bookings-${new Date().toISOString().split('T')[0]}.csv`; link.click();
+  }
+
+  function setClientLink(){ let link = window.location.origin + window.location.pathname + '?client=1'; if(document.getElementById('clientShareLink')) document.getElementById('clientShareLink').value = link; }
+  window.copyClientLink = () => { let link = document.getElementById('clientShareLink'); link.select(); document.execCommand('copy'); alert('Booking link copied! 📋'); }
+  window.shareClientWhatsApp = () => { let link = document.getElementById('clientShareLink').value; let msg = `🧺 MARTHA'S LAUNDRY & PROJECTS 🧺\n\nBook washing & ironing service:\n${link}\n\n🏦 Capitec: ${CAPITEC_ACCOUNT}\n📱 WhatsApp: 060 755 7560\nClean clothes, Happy life!`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
+  window.toggleDark = () => { document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')); }
+  if(localStorage.getItem('darkMode')==='true') document.body.classList.add('dark-mode');
+});
+
+// FORCE CLEAR CACHE ONCE
+if('caches' in window){ caches.keys().then(names => names.forEach(name => caches.delete(name))); }
+if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister())); }
+localStorage.clear(); sessionStorage.clear(); console.log("Cache cleared");
+</script>
+</body>
+</html>
